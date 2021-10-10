@@ -1,0 +1,17 @@
+.Container {
+    height: 100%;
+    display: flex;
+    .TitleDiv {
+        display: flex;
+        align-items: center;
+        .Title {
+            padding-left: 23px;
+            font-size: 25px;
+            margin: 0;
+        }
+    }
+    .Space{
+        flex-grow: 1;
+    }
+    
+}

@@ -1,0 +1,20 @@
+.Container {
+    width: 90px;
+    margin-right: 30px;
+    padding-bottom: 15px;
+    text-align: center;
+    position: relative;
+    .Star {
+        position: absolute;
+        font-size: 10px;
+        top: 0;
+        right: 15px;
+        color: rgb(226, 222, 3);
+    }
+    .FolderIcon {
+        font-size: 50px;
+    }
+    .FolderName {
+        margin: 0;
+    }
+}
