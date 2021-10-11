@@ -1,0 +1,53 @@
+@mixin form-mixin {
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+.TextField {
+    background-color: white;
+    border-radius: 5px;
+}
+
+.Container {
+    height: 100vh;
+    max-height: 100vh;
+    background-image: url('./pexels-miguel-á-padriñán-19670\ \(1\).jpg');
+    background-color: grey;
+    position: relative;
+    .LoginBox {
+        position: absolute;
+        width: 600px;
+        height: 350px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(128, 128, 128, 0.267);
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        align-items: center;
+        justify-content: center;
+        .TitleDiv {
+            .Title {
+                text-align: center;
+                font-size: 40px;
+                font-weight: 500;
+                color: rgb(73, 73, 73);
+                margin-top: 0;
+                margin-bottom: 15px
+            }
+        }
+        .InputDiv {
+            @include form-mixin;
+        }
+        .PasswordDiv {
+            @include form-mixin;
+        }
+        .ButtonDiv {
+            @include form-mixin;
+            .Button {
+                height: 60px;
+            }
+        }
+    }
+}

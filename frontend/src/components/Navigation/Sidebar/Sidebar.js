@@ -21,6 +21,8 @@ function BasicList() {
                             <ListItemText primary="Əsas Kabinet" />
                         </ListItemButton>
                     </ListItem>
+            <Divider />
+
                     <ListItem disablePadding>
                         <ListItemButton>
                             <ListItemIcon>
@@ -29,6 +31,8 @@ function BasicList() {
                             <ListItemText primary="Mənimlə Paylaşılanlar" />
                         </ListItemButton>
                     </ListItem>
+            <Divider />
+
                     <ListItem disablePadding>
                         <ListItemButton>
                             <ListItemIcon>
@@ -37,6 +41,8 @@ function BasicList() {
                             <ListItemText primary="Ulduzladıqlarım" />
                         </ListItemButton>
                     </ListItem>
+            <Divider />
+
                     <ListItem disablePadding>
                         <ListItemButton>
                             <ListItemIcon>
@@ -49,12 +55,12 @@ function BasicList() {
             </nav>
             <Divider />
             <nav aria-label="secondary mailbox folders">
-            <List>
+            <List style={{backgroundColor: 'rgba(0, 0, 0, 0.05)'}}>
                 <ListItem disablePadding>
                         <ListItemIcon>
                             <FiSave style={{ fontSize: 22, marginLeft: 15 }} />
                         </ListItemIcon>
-                        <ListItemText primary="Ümumi yer (5GB-dan 2.34GB)" />
+                        <ListItemText primary="Ümumi yer (5GB-dan 2.34GB)"/>
                 </ListItem>
             </List>
         </nav>
