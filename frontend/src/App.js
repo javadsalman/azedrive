@@ -1,4 +1,3 @@
-import Layout from './HOC/Layout/Layout';
 import { useMemo } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Login from './containers/Auth/Login/Login';
@@ -7,6 +6,7 @@ import Appbar from './components/Navigation/Appbar/Appbar';
 import Sidebar from './components/Navigation/Sidebar/Sidebar';
 import Topbar from './components/Navigation/Topbar/Topbar';
 import Dashboard from './containers/Dashboard/Dashboard';
+import Detail from './containers/Detail/Detail';
 
 function App() {
     const auth = true;
@@ -25,7 +25,11 @@ function App() {
                             <Topbar />
                         </div>
                         <div className={classes.DashboardDiv}>
-                            <Dashboard />
+                            <Switch>
+                                <Route path="/dashboard" component={Dashboard} />
+                                <Route path="/detail" component={Detail} />
+                                <Redirect to="/dashboard" exact />
+                            </Switch>
                         </div>
                     </div>
                 </div>

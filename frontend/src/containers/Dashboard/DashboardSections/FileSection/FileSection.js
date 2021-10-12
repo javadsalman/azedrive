@@ -1,5 +1,5 @@
-import File from '../../UI/File/File';
 import classes from './FileSection.module.scss';
+import File from './../../../../components/UI/File/File';
 
 function FileSection(props) {
 

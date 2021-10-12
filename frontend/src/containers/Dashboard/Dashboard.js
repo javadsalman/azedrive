@@ -1,6 +1,6 @@
-import FolderSection from '../../components/DashboardSections/FolderSection/FolderSection';
 import classes from './Dashboard.module.scss'
-import FileSection from './../../components/DashboardSections/FileSection/FileSection';
+import FileSection from './DashboardSections/FileSection/FileSection';
+import FolderSection from './DashboardSections/FolderSection/FolderSection';
 
 
 function Dashboard(props) {

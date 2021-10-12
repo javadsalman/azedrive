@@ -1,5 +1,5 @@
-import Folder from '../../UI/Folder/Folder';
 import classes from './FolderSection.module.scss';
+import Folder from './../../../../components/UI/Folder/Folder';
 
 function FolderSection(props) {
 

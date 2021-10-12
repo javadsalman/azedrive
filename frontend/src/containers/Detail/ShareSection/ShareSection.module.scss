@@ -1,0 +1,19 @@
+.Container {
+    display: grid;
+    grid-template-columns: 50% auto;
+    column-gap: 20px;
+    .ListDiv {
+        background-color: white;
+        grid-column: 1/2;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        .Nav {
+            height: 300px;
+            overflow-y: auto;
+        }
+    }
+    .SettingsDiv {
+        & > div {
+            margin-bottom: 15px;
+        }
+    }
+}

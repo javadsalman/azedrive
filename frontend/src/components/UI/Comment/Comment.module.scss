@@ -1,0 +1,32 @@
+.Container {
+    min-height: 70px;
+    background-color: rgb(245, 245, 245);
+    display: grid;
+    grid-template-columns: 10% auto 5%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    margin-top: 2px;
+    .PhotoDiv{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .TextDiv{
+
+
+        .ContentDiv{
+            .Content {
+                margin-top: 3px;
+                font-size: 18px;
+            }
+        }
+    }
+    
+    .SettingsDiv{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    
+}
