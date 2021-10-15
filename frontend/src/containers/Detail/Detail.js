@@ -1,6 +1,6 @@
 import { BsFillFileEarmarkPlayFill } from 'react-icons/bs';
 import classes from './Detail.module.scss';
-import Button from '@mui/material/Button'
+import Button from '@mui/material/Button';
 import ShareSection from './ShareSection/ShareSection';
 import CommentSection from './CommentSection/CommentSection';
 
@@ -9,11 +9,13 @@ function Detail(props) {
     return (
         <div className={classes.Container}>
             <div className={classes.AbstractDiv}>
-                <div className={classes.IconDiv}>
-                    <BsFillFileEarmarkPlayFill />
-                </div>
-                <div className={classes.TitleDiv}>
-                    interstellar_1080p.mp4
+                <div className={classes.Abstract}>
+                    <div className={classes.IconDiv}>
+                        <BsFillFileEarmarkPlayFill />
+                    </div>
+                    <div className={classes.TitleDiv}>
+                        interstellar_1080p.mp4
+                    </div>
                 </div>
             </div>
             <div className={classes.InfoDiv}>
@@ -51,7 +53,6 @@ function Detail(props) {
                 </div>
             </div>
             <div className={classes.CommentDiv}>
-                <h1 className={classes.CommentTitle}>ŞƏRHLƏR</h1>
                 <CommentSection />
             </div>
         </div>

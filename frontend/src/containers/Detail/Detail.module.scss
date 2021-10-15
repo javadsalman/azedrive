@@ -5,16 +5,25 @@
     .AbstractDiv {
         grid-column: 1/2;
         grid-row: 1/2;
-        text-align: center;
+        background-color: whitesmoke;
         display: flex;
         justify-content: center;
-        flex-direction: column;
-        .IconDiv {
-            font-size: 170px;
-        }
-
-        .TitleDiv {
-            font-size: 25px;
+        align-items: center;
+        .Abstract {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            background-color: white;
+            padding: 30px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            .IconDiv {
+                font-size: 170px;
+            }
+    
+            .TitleDiv {
+                font-size: 25px;
+            }
         }
     }
     .InfoDiv {
@@ -26,6 +35,8 @@
         column-gap: 10px;
         padding: 15px;
         border-left: 1px solid rgba(0, 0, 0, 0.12);
+        background-color: rgb(245, 245, 245);
+
         .InfoColumn {
             .InfoTitle {
                 margin: 0;

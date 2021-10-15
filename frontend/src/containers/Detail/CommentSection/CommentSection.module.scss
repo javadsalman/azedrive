@@ -1,13 +1,15 @@
 .Container {
     border: 1px solid rgba(0, 0, 0, 0.12);
-    width: 90%;
+    border-top: none;
     margin: 0 auto 0 auto;
     margin-bottom: 100px;
-    border-radius: 5px;
     .InputDiv {
         margin-bottom: 2px;
+        padding: 10px 13px 10px 19px;
+        background-color: whitesmoke;
         .TextField {
-            padding-left: 20px;
+            background-color: white;
+            border-radius: 5px;
         }
     }
 

@@ -9,11 +9,11 @@ function CommentSection(props) {
             <div className={classes.InputDiv}>
                 <TextField
                     fullWidth
-                    variant="filled"
+                    variant="outlined"
                     placeholder="Şərh Yaz"
                     multiline
-                    minRows={2}
-                    classes={{InputLabel: classes.TextField}}
+                    minRows={1}
+                    classes={{root: classes.TextField}}
                     />
             </div>
             <div className={classes.CommentsDiv}>

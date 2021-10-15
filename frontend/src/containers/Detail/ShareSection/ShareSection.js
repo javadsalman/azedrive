@@ -1,6 +1,5 @@
-import { Button, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField } from '@mui/material';
+import { Button, Divider, List, ListItem, ListItemButton, ListItemText, TextField } from '@mui/material';
 import { Box } from '@mui/system';
-import { BsFillPersonFill } from 'react-icons/bs';
 import classes from './ShareSection.module.scss';
 
 function ShareSection(props) {
@@ -86,7 +85,7 @@ function ShareSection(props) {
                     <TextField
                         fullWidth
                         variant="outlined"
-                        style={{backgroundColor: 'white', borderRadius: 5}}
+                        style={{ backgroundColor: 'white', borderRadius: 5 }}
                         placeholder="Istifadəçi adı və ya Email"
 
                     />

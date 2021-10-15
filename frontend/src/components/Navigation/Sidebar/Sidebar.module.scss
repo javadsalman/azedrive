@@ -1,0 +1,43 @@
+.StorageList {
+    text-align: center;
+    padding-left: 35px;
+    padding-right: 35px;
+    .StorageTitle {
+        margin: 0;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+    .Total {
+        background-color: rgb(170, 170, 170);
+        height: 5px;
+        border-radius: 5px;
+        .Filled {
+            height: 100%;
+            background-color: rgb(31, 108, 250);
+            border-radius: 5px;
+
+        }
+    }
+    .StorageAmount {
+        text-align: left;
+        margin-top: 2px;
+        font-size: 14px;
+        .AmountNumber {
+            font-weight: 500;
+        }
+    }
+}
+
+.NavLink {
+    color: black;
+    text-decoration: none;
+    .ListItem {
+        padding: 0;
+    }
+}
+
+.Active {
+    .ListItem {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+}
