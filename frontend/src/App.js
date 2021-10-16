@@ -9,7 +9,7 @@ import Detail from './containers/Detail/Detail';
 import Auth from './containers/Auth/Auth';
 
 function App() {
-    const auth = false;
+    const auth = true;
     const routes = useMemo(() => {
         if (auth) {
             return (
@@ -27,8 +27,8 @@ function App() {
                         <div className={classes.DashboardDiv}>
                             <Switch>
                                 <Route path="/dashboard/detail" component={Detail} />
-                                <Route path="/dashboard" component={Dashboard} />
-                                <Redirect to="/dashboard" exact />
+                                <Route path="/dashboard/:dashType" component={Dashboard} />
+                                <Redirect to="/dashboard/main" exact />
                             </Switch>
                         </div>
                     </div>
