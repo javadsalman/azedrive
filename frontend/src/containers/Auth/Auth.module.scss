@@ -17,7 +17,6 @@
     .LoginBox {
         position: absolute;
         width: 600px;
-        height: 350px;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -47,6 +46,19 @@
             @include form-mixin;
             .Button {
                 height: 60px;
+            }
+            .RegLogDiv {
+                padding-top: 10px;
+                text-align: center;
+                .RegLog {
+                    color: black;
+                    font-weight: 500;
+                    cursor: pointer;
+                    user-select: none;
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
             }
         }
     }

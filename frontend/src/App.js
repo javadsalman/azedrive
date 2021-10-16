@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import Login from './containers/Auth/Login/Login';
 import classes from './App.module.scss';
 import Appbar from './components/Navigation/Appbar/Appbar';
 import Sidebar from './components/Navigation/Sidebar/Sidebar';
 import Topbar from './components/Navigation/Topbar/Topbar';
 import Dashboard from './containers/Dashboard/Dashboard';
 import Detail from './containers/Detail/Detail';
+import Auth from './containers/Auth/Auth';
 
 function App() {
-    const auth = true;
+    const auth = false;
     const routes = useMemo(() => {
         if (auth) {
             return (
@@ -38,8 +38,8 @@ function App() {
         else {
             return (
                 <Switch>
-                    <Route path="/login" component={Login} />
-                    <Redirect to="/login" exact />
+                    <Route path="/auth/:authType" component={Auth} />
+                    <Redirect to="/auth/login" />
                 </Switch>
             )
         }
