@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'drive',
     'user',
     #external apps
+    'django_cleanup',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -88,6 +89,14 @@ WSGI_APPLICATION = 'azedrive.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'azedrive_db',
+        'USER': 'postgres',
+        'PASSWORD': '123456c',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'logdb': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }

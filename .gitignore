@@ -1,6 +1,7 @@
 # Backend
 *.pyc
 activate.bat
+db.sqlite3
 
 # Frontend
 
