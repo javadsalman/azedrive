@@ -63,7 +63,7 @@ function Topbar(props) {
             case 'folder': return 'Qovluq - ' + folderName;
             default: return ''
         }
-    }, [params]);
+    }, [params, folderName]);
 
     return (
         <Fragment>

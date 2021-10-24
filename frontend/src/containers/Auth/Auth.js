@@ -1,13 +1,33 @@
 import { Button, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Switch } from 'react-router';
 import classes from './Auth.module.scss'
 import { Route, Redirect, Link } from 'react-router-dom';
+import { login, register } from '../../store/actions/authActions';
+import { connect } from 'react-redux';
 
 function Auth(props) {
     const [input, setInput] = useState('');
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassowrd] = useState('');
     const authType = props.match.params.authType
+
+    const buttonClickHandler = useCallback(() => {
+        if (authType === 'login') {
+            props.onLogin(input, password);
+        }
+        else if (authType === 'register') {
+            props.onRegister(username, email, password)
+        }
+    }, [props, authType, input, username, email, password])
+
+    const handleKeyPress = useCallback((event) => {
+        if (event.key === 'Enter') {
+            buttonClickHandler();
+        }
+    }, [buttonClickHandler]);
+
     return (
         <div className={classes.Container}>
             <div 
@@ -25,6 +45,7 @@ function Auth(props) {
                                 value={input}
                                 onChange={event => setInput(event.target.value)}
                                 classes={{ root: classes.TextField }}
+                                onKeyPress={handleKeyPress}
                                 placeholder="Istifadəçi Adı və ya Email"
                             />
                         </div>
@@ -35,9 +56,10 @@ function Auth(props) {
                             <TextField
                                 fullWidth
                                 variant="outlined"
-                                value={input}
-                                onChange={event => setInput(event.target.value)}
+                                value={username}
+                                onChange={event => setUsername(event.target.value)}
                                 classes={{ root: classes.TextField }}
+                                onKeyPress={handleKeyPress}
                                 placeholder="Istifadəçi Adı"
                             />
                         </div>
@@ -45,10 +67,11 @@ function Auth(props) {
                             <TextField
                                 fullWidth
                                 variant="outlined"
-                                value={input}
-                                onChange={event => setInput(event.target.value)}
+                                value={email}
+                                onChange={event => setEmail(event.target.value)}
                                 classes={{ root: classes.TextField }}
                                 type="email"
+                                onKeyPress={handleKeyPress}
                                 placeholder="Email"
                             />
                         </div>
@@ -64,6 +87,7 @@ function Auth(props) {
                         value={password}
                         onChange={event => setPassowrd(event.target.value)}
                         classes={{ root: classes.TextField }}
+                        onKeyPress={handleKeyPress}
                         placeholder="Şifrə"
                     />
                 </div>
@@ -72,10 +96,12 @@ function Auth(props) {
                         fullWidth
                         size="large"
                         classes={{ root: classes.Button }}
-                        variant="contained">
+                        variant="contained"
+                        onClick={buttonClickHandler}
+                        >
                         {authType === 'login' ? 'GIRIŞ' : 'QEYDIYYAT'}
-
                     </Button>
+
                     <div className={classes.RegLogDiv}>
                         <Link
                             to={`/auth/${authType === 'login' ? 'register' : 'login'}`}
@@ -91,4 +117,12 @@ function Auth(props) {
 }
 
 
-export default Auth;
+function mapDispatchToProps(dispatch) {
+    return {
+        onLogin: (input, password) => dispatch(login(input, password)),
+        onRegister: (username, email, password) => dispatch(register(username, email, password))
+    };
+}
+
+
+export default connect(null, mapDispatchToProps)(Auth);

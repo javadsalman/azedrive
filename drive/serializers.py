@@ -8,6 +8,9 @@ class FileListSerializer(serializers.ModelSerializer):
         model = File
         fields = ['id', 'name', 'folder', 'description', 'type', 'size', 'stared', 'deleted']
         read_only_fields = ['id', 'type']
+        extra_kwargs = {
+            'description': {'write_only': True}
+        }
 
     def create(self, validated_data):
         file = File.objects.create(
@@ -27,22 +30,14 @@ class FileListSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(f'{name} adlı fayl mövcuddur!')
         return data
 
-class FileDetailSerializer(serializers.ModelSerializer   ):
+class FileDetailSerializer(serializers.ModelSerializer):
     download_url = serializers.HyperlinkedIdentityField(view_name='download', read_only=True)
     created = serializers.DateTimeField(format='%d-%m-%Y')
     class Meta:
         model = File
-        exclude = ['folder', 'description', 'stared_users', 'deleted', 'size', 'file_object', 'mime_type']
+        exclude = ['folder', 'description', 'stared_users', 'deleted', 'file_object', 'mime_type']
         read_only_fields = ['id', 'created']
 
-# class FileDetailSerializer(serializers.HyperlinkedModelSerializer   ):
-#     download_url = serializers.HyperlinkedIdentityField(view_name='download')
-#     users = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-#     author = serializers.PrimaryKeyRelatedField(read_only=True)
-#     class Meta:
-#         model = File
-#         exclude = ['folder', 'description', 'stared_users', 'deleted', 'size', 'file_object']
-        # fields = ['download_url']
 
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:

@@ -11,8 +11,6 @@ function DownloadModal(props) {
     const history = useHistory();
     const {folderId} = queryString.parse(history.location.search)
 
-    console.log(folderId)
-
     const fileSelectHandler = useCallback((event) => {
         setFile(event.target.files[0])
     }, []);

@@ -10,4 +10,5 @@ urlpatterns = [
     path('folderlist/<int:pk>/', views.FolderDetailAV.as_view(), name='folder-detail'),
     path('commentlist/', views.CommentListAV.as_view(), name='comment-list'),
     path('commentlist/<int:pk>/', views.CommentDetailAV.as_view(), name='comment-detail'),
+    path('totalsize/', views.total_size, name='total-size'),
 ]

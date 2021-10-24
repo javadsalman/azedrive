@@ -1,5 +1,7 @@
+from django.db.models.aggregates import Sum
 from rest_framework import generics, views, parsers, status
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
@@ -29,10 +31,22 @@ class FileDetailAV(generics.RetrieveUpdateDestroyAPIView):
     queryset=File.objects.all()
     serializer_class = FileDetailSerializer
 
+    def destroy(self, *args, **kwargs):
+        instance = self.get_object()
+        if instance.deleted:
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            instance.deleted = True
+            instance.save()
+            return Response(data=self.get_serializer(instance=instance).data, status=status.HTTP_202_ACCEPTED)
+
+
+
 class FileUploadView(views.APIView):
     parser_classes = [parsers.FileUploadParser]
 
-    def put(self, request, pk, filename, format=None):
+    def put(self, request, pk, filename):
         file_data = request.data['file']
         file_instance = File.objects.get(pk=pk)
         directory = join(
@@ -48,7 +62,6 @@ class FileUploadView(views.APIView):
             for chunk in file_data.chunks():
                 file.write(chunk)
 
-        # print('\n\n\n\n', file_path, '\n\n\n\n')
         file_instance.file_object.name = media_inner_path
         file_instance.save()
         
@@ -57,7 +70,7 @@ class FileUploadView(views.APIView):
 def download(request, pk):
     instance = get_object_or_404(File, pk=pk)
     file_path = instance.file_object.path
-    print('\n\n\n\n', file_path, '\n\n\n\n')
+    # print('\n\n\n\n', file_path, '\n\n\n\n')
 
     if exists(file_path) and "(instance.author == request.user or request.user in instance.users.all())":
         with open(file_path, 'rb') as fh:
@@ -65,6 +78,12 @@ def download(request, pk):
             response['Content-Disposition'] = 'attachment; filename=' + instance.name
             return response
     raise Http404
+
+@api_view(['GET'])
+def total_size(request):
+    queryset = File.objects.filter(author=request.user)
+    result = queryset.aggregate(total_size = Sum('size'))
+    return Response(result)
 
 class FolderListAV(generics.ListCreateAPIView):
     queryset = Folder.objects.all()
@@ -79,6 +98,16 @@ class FolderListAV(generics.ListCreateAPIView):
 class FolderDetailAV(generics.RetrieveUpdateDestroyAPIView):
     queryset = Folder.objects.all()
     serializer_class = FolderSerializer
+
+    def destroy(self, *args, **kwargs):
+        instance = self.get_object()
+        if instance.deleted:
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            instance.deleted = True
+            instance.save()
+            return Response(data=self.get_serializer(instance=instance).data, status=status.HTTP_202_ACCEPTED)
 
 
 class CommentListAV(generics.ListCreateAPIView):
