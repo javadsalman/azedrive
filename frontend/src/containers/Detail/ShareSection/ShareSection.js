@@ -86,7 +86,7 @@ function ShareSection(props) {
                         fullWidth
                         variant="outlined"
                         style={{ backgroundColor: 'white', borderRadius: 5 }}
-                        placeholder="Istifadəçi adı və ya Email"
+                        placeholder="Istifadəçi Adı və ya Email"
 
                     />
                 </div>

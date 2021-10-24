@@ -1,8 +1,8 @@
-import { BsFillFileEarmarkPlayFill } from 'react-icons/bs';
 import classes from './Detail.module.scss';
 import Button from '@mui/material/Button';
 import ShareSection from './ShareSection/ShareSection';
 import CommentSection from './CommentSection/CommentSection';
+import FileIcon from '../../components/UI/File/FileIcon/FileIcon';
 
 function Detail(props) {
 
@@ -11,11 +11,14 @@ function Detail(props) {
             <div className={classes.AbstractDiv}>
                 <div className={classes.Abstract}>
                     <div className={classes.IconDiv}>
-                        <BsFillFileEarmarkPlayFill />
+                        <FileIcon type="video" size={120} />
                     </div>
-                    <div className={classes.TitleDiv}>
+                    <p className={classes.Title}>
                         interstellar_1080p.mp4
-                    </div>
+                    </p>
+                    <p className={classes.Description}>
+                        Interstellar Filmi Full HD Türkçe Dublaj. IMDB puanı 9. En çok izlenenler sırasında
+                    </p>
                 </div>
             </div>
             <div className={classes.InfoDiv}>
@@ -27,8 +30,9 @@ function Detail(props) {
                     <h3 className={classes.InfoTitle}>Tarix</h3>
                     <p className={classes.InfoResult}>05.11.2020</p>
                 </div>
-                <div>
+                <div className={classes.DownloadButtonDiv}>
                     <Button
+                        className={classes.DownloadButton}
                         variant="contained"
                         color="success"
                         fullWidth
@@ -37,8 +41,9 @@ function Detail(props) {
                         Yüklə
                     </Button>
                 </div>
-                <div>
+                <div className={classes.DeleteButtonDiv}>
                     <Button
+                        className={classes.DeleteButtonDiv}
                         variant="contained"
                         color="error"
                         fullWidth

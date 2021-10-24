@@ -2,6 +2,7 @@
 *.pyc
 activate.bat
 db.sqlite3
+media/*
 
 # Frontend
 

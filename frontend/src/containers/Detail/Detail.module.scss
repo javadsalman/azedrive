@@ -1,3 +1,13 @@
+@mixin padding-x($value) {
+    padding-left: $value;
+    padding-right: $value;
+}
+
+@mixin padding-y($value) {
+    padding-top: $value;
+    padding-bottom: $value;
+}
+
 .Container {
     display: grid;
     grid-template-columns: 35% 65%;
@@ -6,23 +16,33 @@
         grid-column: 1/2;
         grid-row: 1/2;
         background-color: whitesmoke;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 15px;
         .Abstract {
+            box-sizing: border-box;
             text-align: center;
+            height: 100%;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             flex-direction: column;
             background-color: white;
-            padding: 30px;
             border: 1px solid rgba(0, 0, 0, 0.12);
+            @include padding-y(30px);
+            
             .IconDiv {
-                font-size: 170px;
+                @include padding-x(30px);
             }
     
-            .TitleDiv {
+            .Title {
+                @include padding-x(30px);
+
                 font-size: 25px;
+                margin-top: 0;
+                margin-bottom: 10px;
+                font-weight: 500;
+            }
+            .Description {
+                @include padding-x(10px);
+                margin: 0;
             }
         }
     }
@@ -46,6 +66,9 @@
                 text-align: center;
                 margin: 0;
             }
+        }
+        .DownloadButtonDiv {
+            padding-left: 22px;
         }
         .SharedDiv {
             grid-column: 1/5;

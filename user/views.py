@@ -5,25 +5,29 @@ from .serializers import UserSerializer
 from rest_framework.generics import CreateAPIView
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
-from re import fullmatch
 from rest_framework.response import Response
 from rest_framework import status
+from re import compile
+from .models import LoginLog
 # Create your views here.
 
-mail_pattern = r'\b[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\b'
+mail_compiler = compile(r'^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$')
+username_compiler = compile(r'^\w+$')
 
 class RegisterUserView(CreateAPIView):
     serializer_class = UserSerializer
     model = User
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 def login_view(request):
-    input_text = request.data['input']
-    password = request.data['password']
+    print(request.META['HTTP_USER_AGENT'])
+    print('netice', request.META['REMOTE_ADDR'])
+    input_text = request.data.get('input', '')
+    password = request.data.get('password', '')
 
-    if fullmatch(mail_pattern, input_text):
+    if mail_compiler.match(input_text):
         user_kwarg = {'email': input_text}
-    elif fullmatch(r'\b\w+\b', input_text):
+    elif username_compiler.match(input_text):
         user_kwarg = {'username': input_text}
     else:
         return Response(data={'message': 'Istifadəçi Adı və ya Email düzgün yazılmayıb!'}, status=status.HTTP_400_BAD_REQUEST)
@@ -34,6 +38,11 @@ def login_view(request):
             'username': user.username,
             'token': token
         }
+        LoginLog.objects.create(
+            username=user.username,
+            user_agent=request.META.get('HTTP_USER_AGENT'),
+            ip_adress=request.META.get('REMOTE_ADDR'),
+        )
         return Response(data=data, status=status.HTTP_200_OK)
     else:
         return Response(data={'message': 'Giriş məlumatları düzgün qeyd edilməyib!'}, status=status.HTTP_400_BAD_REQUEST)

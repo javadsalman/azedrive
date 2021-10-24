@@ -22,7 +22,9 @@ function App() {
                     </div>
                     <div className={classes.MainDiv}>
                         <div className={classes.TopbarDiv}>
-                            <Route path="/dashboard/:pagetype" component={Topbar} />
+                            <Switch>
+                                <Route path="/dashboard/:dashType" component={Topbar} />
+                            </Switch>
                         </div>
                         <div className={classes.DashboardDiv}>
                             <Switch>

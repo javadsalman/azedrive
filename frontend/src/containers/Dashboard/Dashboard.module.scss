@@ -9,10 +9,8 @@
 }
 
 .Container {
+    position: relative;
     .FolderTitle {
-        @extend .title;
-    }
-    .FileTitle {
         @extend .title;
     }
 }

@@ -1,4 +1,6 @@
-const initialState = {}
+const initialState = {
+    
+}
 
 
 function authReducer(state=initialState, action) {

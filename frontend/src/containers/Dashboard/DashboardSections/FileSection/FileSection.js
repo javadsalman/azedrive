@@ -1,33 +1,41 @@
 import classes from './FileSection.module.scss';
 import File from './../../../../components/UI/File/File';
+import { Fragment } from 'react';
+import { connect } from 'react-redux';
+import { toggleSelect } from './../../../../store/actions/driveActions';
 
 function FileSection(props) {
 
     return (
-        <div className={classes.Container}>
-            <File type="pdf"/>
-            <File type="pdf"/>
-            <File type="doc"/>
-            <File type="doc"/>
-            <File type="xml"/>
-            <File type="xml"/>
-            <File type="ppt"/>
-            <File type="ppt"/>
-            <File type="txt"/>
-            <File type="txt"/>
-            <File type="zip"/>
-            <File type="zip"/>
-            <File type="image"/>
-            <File type="image"/>
-            <File type="music"/>
-            <File type="music"/>
-            <File type="video"/>
-            <File type="video"/>
-            <File type="aaaaa"/>
-            <File type="aaaaa"/>
-            <File type="aaaaa"/>
-        </div>
+        <Fragment>
+            <p className={classes.FileTitle}>Fayllar</p>
+            <div className={classes.Container}>
+                {props.files.map(file => {
+                    return <File 
+                        name={file.name}
+                        type={file.type}
+                        click={() => props.ontoggleSelect(file.id)}
+                        stared={file.stared}
+                        selected={props.selected === file.id} 
+                        key={file.id}/>
+                })}
+                
+            </div>
+        </Fragment>
     )
 }
 
-export default FileSection
+function mapStateToProps(state) {
+    return {
+        files: state.drive.files,
+        selected: state.drive.selected
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        ontoggleSelect: (id) => dispatch(toggleSelect(id)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FileSection)
