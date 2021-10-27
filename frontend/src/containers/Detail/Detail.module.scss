@@ -12,6 +12,7 @@
     display: grid;
     grid-template-columns: 35% 65%;
     grid-template-rows: auto auto;
+    position: relative;
     .AbstractDiv {
         grid-column: 1/2;
         grid-row: 1/2;
@@ -36,9 +37,12 @@
                 @include padding-x(30px);
 
                 font-size: 25px;
-                margin-top: 0;
-                margin-bottom: 10px;
+                margin: 0;
                 font-weight: 500;
+            }
+            .Size {
+                margin: 0;
+                margin-bottom: 4px;
             }
             .Description {
                 @include padding-x(10px);

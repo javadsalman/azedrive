@@ -1,84 +1,82 @@
 
-import { TOGGLE_SELECT } from './../actions/actionTypes';
+import { SET_LOADING, SET_SELECTED, SET_FILES, SET_FOLDERS, ADD_FOLDER, ADD_FILE, DELETE_FOLDER, DELETE_FILE, STAR_FOLDER, STAR_FILE } from './../actions/actionTypes';
 const initialState = {
-    selected: '',
+    selectedId: '',
+    selectedItemType: '',
     totalStorage: 120,
     loading: false,
     folders: [
-        {
-            id: 'folder-1',
-            name: 'Şəkillər',
-            stared: true,
-        },
-        {
-            id: 'folder-2',
-            name: 'Kitablar',
-            stared: true,
-        },
-        {
-            id: 'folder-3',
-            name: 'Mahnilar',
-            stared: false,
-        },
-        {
-            id: 'folder-4',
-            name: 'Senedler',
-            stared: false,
-        },
-        {
-            id: 'folder-5',
-            name: 'Dersler',
-            stared: false,
-        },
     ],
     files: [
-        {
-            id: 'file-1',
-            name: 'Turlerin Kökeni.pdf',
-            type: 'pdf',
-            stared: true,
-        },
-        {
-            id: 'file-2',
-            name: 'Otostopçunun Galaksi Rehberi.pdf',
-            type: 'pdf',
-            stared: false,
-        },
-        {
-            id: 'file-3',
-            name: 'Referat Slayt.ppt',
-            type: 'ppt',
-            stared: false,
-        },
-        {
-            id: 'file-4',
-            name: 'Hesablamalar.xml',
-            type: 'xml',
-            stared: true,
-        },
-        {
-            id: 'file-5',
-            name: 'Notlar.txt',
-            type: 'txt',
-            stared: false,
-        },
     ],
 }
 
-const toggleSelect = (state, action) => {
-    console.log('reducere girir')
-    if (state.selected === action.id) {
-        return {...state, selected: null};
-    }
-    else {
-        return {...state, selected: action.id}
-    }
+const setSelected = (state, action) => {
+    return {...state, selectedId: action.id, selectedItemType: action.itemType}
 }
 
+const setLoading = (state, action) => {
+    return {...state, loading: action.loadingValue}
+}
+
+const setFiles = (state, action) => {
+    return {...state, files: action.files}
+}
+
+const setFolders = (state, action) => {
+    return {...state, folders: action.folders};
+};
+
+const addFile = (state, action) => {
+    return {...state, files: [...state.files, action.newFile]};
+};
+const addFolder = (state, action) => {
+    return {...state, folders: [...state.folders, action.newFolder]};
+};
+
+const deleteFile = (state, action) => {
+    return {...state, files: state.files.filter(file => file.id !== action.deletedFileId)};
+};
+const deleteFolder = (state, action) => {
+    return {...state, folders: state.folders.filter(folder => folder.id !== action.deletedFolderId)};
+};
+
+const setStarFile = (state, action) => {
+    const newFiles = state.files.map(file => {
+        if (file.id === action.fileId) {
+            file.stared = action.newStarStatus;
+            return file;
+        } else {
+            return file;
+        }
+    });
+    return {...state, files: newFiles };
+};
+
+const setStarFolder = (state, action) => {
+    const newFolders = state.folders.map(folder => {
+        if (folder.id === action.folderId) {
+            folder.stared = action.newStarStatus;
+            return folder;
+        } else {
+            return folder
+        }
+    });
+    return {...state, folders: newFolders};
+}
 
 function driveReducer(state=initialState, action) {
     switch(action.type) {
-        case TOGGLE_SELECT: return toggleSelect(state, action);
+        case SET_SELECTED: return setSelected(state, action);
+        case SET_LOADING: return setLoading(state, action);
+        case SET_FILES: return setFiles(state, action);
+        case SET_FOLDERS: return setFolders(state, action);
+        case ADD_FOLDER: return addFolder(state, action);
+        case ADD_FILE: return addFile(state, action);
+        case DELETE_FOLDER: return deleteFolder(state, action);
+        case DELETE_FILE: return deleteFile(state, action);
+        case STAR_FILE: return setStarFile(state, action);
+        case STAR_FOLDER: return setStarFolder(state, action);
         default: return state;
     }
 }

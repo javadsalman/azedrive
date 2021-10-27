@@ -63,4 +63,7 @@ file_types = {
 
 def detect_file_type(file_name):
     suffix = Path(file_name).suffix
-    return file_types.get(suffix.strip('.'), 'undefined')
+    return file_types.get(suffix.strip('.').lower(), 'undefined')
+
+def file_direcotory_path(instance, filename):
+    return f'{instance.author.id}/{instance.folder and instance.folder.id}/{filename}'

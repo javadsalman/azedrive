@@ -6,12 +6,13 @@ import {
 } from '../actions/actionTypes';
 
 const initialState = {
-    token: null,
+    token: false,
     username: '',
+    authId: null,
 }
 
 const setAuthParams = (state, action) => {
-    return {...state, token: action.token, username: action.username}
+    return {...state, token: action.token, username: action.username, authId: action.authId}
 }
 
 function authReducer(state=initialState, action) {

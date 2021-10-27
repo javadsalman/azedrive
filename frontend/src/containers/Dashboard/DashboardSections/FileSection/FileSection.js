@@ -2,10 +2,8 @@ import classes from './FileSection.module.scss';
 import File from './../../../../components/UI/File/File';
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { toggleSelect } from './../../../../store/actions/driveActions';
 
 function FileSection(props) {
-
     return (
         <Fragment>
             <p className={classes.FileTitle}>Fayllar</p>
@@ -14,9 +12,9 @@ function FileSection(props) {
                     return <File 
                         name={file.name}
                         type={file.type}
-                        click={() => props.ontoggleSelect(file.id)}
+                        click={() => props.click(file.id, 'file', file.name)}
                         stared={file.stared}
-                        selected={props.selected === file.id} 
+                        selected={props.selectedId === file.id && props.selectedItemType === 'file'} 
                         key={file.id}/>
                 })}
                 
@@ -28,14 +26,10 @@ function FileSection(props) {
 function mapStateToProps(state) {
     return {
         files: state.drive.files,
-        selected: state.drive.selected
+        selectedId: state.drive.selectedId,
+        selectedItemType: state.drive.selectedItemType
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        ontoggleSelect: (id) => dispatch(toggleSelect(id)),
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(FileSection)
+export default connect(mapStateToProps)(FileSection);

@@ -12,7 +12,6 @@ import { checkAuth } from './store/actions/authActions';
 // import iaxios from './iaxios';
 
 function App(props) {
-    const auth = props.auth;
     useEffect(() => {
         props.onCheckAuth();
         // const resInterceptor = iaxios.interceptors.response.use(res=>res, error => {
@@ -26,8 +25,9 @@ function App(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+
     const routes = useMemo(() => {
-        if (auth) {
+        if (props.token || props.token === false) {
             return (
                 <div className={classes.Container}>
                     <div className={classes.AppbarDiv}>
@@ -61,7 +61,7 @@ function App(props) {
                 </Switch>
             )
         }
-    }, [auth]);
+    }, [props.token]);
 
     
     return (
@@ -73,7 +73,7 @@ function App(props) {
 
 function mapStateToProps(state) {
     return {
-        auth: Boolean(state.auth.token)
+        token: state.auth.token
     };
 }
 

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from mimetypes import guess_type
-from .shared import detect_file_type
+from .utils import detect_file_type, file_direcotory_path
 
 # Create your models here.
 
@@ -11,6 +11,10 @@ class Folder(models.Model):
     stared = models.BooleanField(default=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     deleted = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created']
 
 class File(models.Model):
     name = models.CharField(max_length=100)
@@ -25,16 +29,24 @@ class File(models.Model):
     users = models.ManyToManyField(User, related_name='shared_files')
     size = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
-    file_object = models.FileField(null=True, blank=True)
+    file_object = models.FileField(upload_to=file_direcotory_path, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.type = detect_file_type(self.name)
         self.mime_type = guess_type(self.name)[0]
         super().save(*args, **kwargs)
 
+    class Meta:
+        ordering = ['created']
+
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     file_item = models.ForeignKey(File, on_delete=models.CASCADE)
     content = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        ordering = ['created']
 
     

@@ -20,8 +20,6 @@ class RegisterUserView(CreateAPIView):
 
 @api_view(['GET', 'POST'])
 def login_view(request):
-    print(request.META['HTTP_USER_AGENT'])
-    print('netice', request.META['REMOTE_ADDR'])
     input_text = request.data.get('input', '')
     password = request.data.get('password', '')
 
@@ -36,6 +34,7 @@ def login_view(request):
         token = Token.objects.get_or_create(user=user)[0].key
         data = {
             'username': user.username,
+            'id': user.pk,
             'token': token
         }
         LoginLog.objects.create(

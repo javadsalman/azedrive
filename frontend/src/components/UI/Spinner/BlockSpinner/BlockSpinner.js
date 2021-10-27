@@ -2,7 +2,7 @@ import classes from './BlockSpinner.module.scss';
 
 function BlockSpinner() {
     return (
-        <div class={classes.Loader}>Loading...</div>
+        <div className={classes.Loader}>Loading...</div>
     );
 }
 

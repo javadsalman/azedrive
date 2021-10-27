@@ -7,7 +7,8 @@ class UserSerializer(serializers.ModelSerializer):
     token = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'token']
+        fields = ['id', 'username', 'email', 'password', 'token']
+        read_only_fields = ['id']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):

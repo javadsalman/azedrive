@@ -1,64 +1,92 @@
-import { Avatar, IconButton, Menu, MenuItem } from '@mui/material';
+import { Avatar, IconButton, Menu, MenuItem, TextField } from '@mui/material';
 import classes from './Comment.module.scss';
-import { useState } from 'react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import { useState, memo, useEffect } from 'react';
+import { BsThreeDotsVertical, BsX } from 'react-icons/bs';
 
 
 function Comment(props) {
     const [anchorEl, setAnchorEl] = useState(null);
+    const [text, setText] = useState('');
+    const [change, setChange] = useState(false);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+
+    useEffect(() => {
+        setText(props.content);
+    }, [props.content])
 
 
     return (
         <div className={classes.Container}>
             <div className={classes.PhotoDiv}>
-                <Avatar sx={{ 
-                    width: 65, 
+                <Avatar sx={{
+                    width: 65,
                     height: 65,
                     bgcolor: 'rgb(31, 108, 250)',
                     fontSize: 35
-                    }}>C</Avatar>
+                }}>C</Avatar>
             </div>
             <div className={classes.TextDiv}>
                 <div className={classes.NameDiv}>
                     <b>cavadsalman</b>
                 </div>
                 <div className={classes.ContentDiv}>
-                    <p className={classes.Content}>Çox xoşuma gəldi bu aplikasiya. İşlərinizin davamını arzulayıram</p>
+                    {change
+                        ?
+                        <TextField
+                            variant="standard"
+                            fullWidth
+                            value={text}
+                            classes={{root: classes.TextField}}
+                            onChange={event => setText(event.target.value)}
+                        />
+                        :
+                        <p className={classes.Content}>{text}</p>
+                    }
                 </div>
             </div>
             <div className={classes.SettingsDiv}>
-                <IconButton
-                    id="basic-button"
-                    aria-controls="basic-menu"
-                    aria-haspopup="true"
-                    aria-expanded={open ? 'true' : undefined}
-                    onClick={handleClick}
-                >
-                    <BsThreeDotsVertical />
-                </IconButton>
+                {change
+                    ?
+                    <IconButton onClick={() => {
+                        setChange(false);
+                        setText(props.content);
+                    }}>
+                        <BsX />
+                    </IconButton>
+                    :
+                    <IconButton
+                        id="basic-button"
+                        aria-controls="basic-menu"
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={(event) => setAnchorEl(event.currentTarget)}
+                    >
+                        <BsThreeDotsVertical />
+                    </IconButton>
+                }
+
+
                 <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}
                     open={open}
-                    onClose={handleClose}
+                    onClose={() => setAnchorEl(null)}
                     MenuListProps={{
                         'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                    <MenuItem >Sil</MenuItem>
+                    <MenuItem 
+                        onClick={() => {
+                            setChange(true);
+                            setAnchorEl(null)
+                        }}>
+                        Dəyiş
+                    </MenuItem>
                 </Menu>
             </div>
         </div>
     )
 }
 
-export default Comment;
+export default memo(Comment);

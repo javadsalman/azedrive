@@ -1,38 +1,34 @@
 import { IconButton, Stack } from "@mui/material";
 import Divider from '@mui/material/Divider';
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 import { FiFilePlus, FiFolderPlus, FiTrash2, FiX, FiStar } from 'react-icons/fi';
 import classes from './Topbar.module.scss';
-import FormModal from './../../UI/Modals/FormModal/FormModal';
-import AlertModal from "../../UI/Modals/AlertModal/AlertModal";
 import { connect } from 'react-redux';
-import { toggleSelect } from './../../../store/actions/driveActions';
-import DownloadModal from './DownloadModal/DownloadModal';
+import { setSelected, deleteSelected, starSelected } from './../../../store/actions/driveActions';
 import queryString from 'query-string';
+import AddFolderModal from './TopbarModals/AddFolderModal/AddFolderModal';
+import UploadFileModal from './TopbarModals/UploadFileModal/UploadFileModal';
 
 function Topbar(props) {
-    const [formModalOpen, setFormModalOpen] = useState(false);
-    const [alertModalOpen, setAlertModalOpen] = useState(false);
-    const [downloadModalOpen, setDownloadModalOpen] = useState(false);
-    const params = props.match.params
-    const {folderName} = queryString.parse(props.location.search)
+    const [modal, setModal] = useState(null);
+    const {folderName, folderId} = queryString.parse(props.location.search)
 
     const iconButtons = useMemo(() => {
         if (props.match.params.dashType === 'detail') {
             return null;
         }
-        else if (props.selected) {
+        else if (props.selectedId) {
             return (
                 <Fragment>
-                    <IconButton aria-label="star">
+                    <IconButton aria-label="star" onClick={props.onStarSelected}>
                         <FiStar />
                     </IconButton>
                     <Divider orientation="vertical" flexItem />
-                    <IconButton aria-label="delete">
+                    <IconButton aria-label="delete" onClick={props.onDeleteSelected}>
                         <FiTrash2 />
                     </IconButton>
                     <Divider orientation="vertical" flexItem />
-                    <IconButton aria-label="disselect" onClick={() => props.onToggleSelect(null)}>
+                    <IconButton aria-label="disselect" onClick={() => props.onsetSelected(null, null)}>
                         <FiX />
                     </IconButton>
                 </Fragment>
@@ -41,11 +37,11 @@ function Topbar(props) {
         else {
             return (
                 <Fragment>
-                    <IconButton aria-label="addFile" onClick={() => setDownloadModalOpen(true)}>
+                    <IconButton aria-label="addFile" onClick={() => setModal('UploadFileModal')}>
                         <FiFilePlus />
                     </IconButton>
                     <Divider orientation="vertical" flexItem />
-                    <IconButton aria-label="addFolder" onClick={() => setAlertModalOpen(true)}>
+                    <IconButton aria-label="addFolder" onClick={() => setModal('AddFolderModal')}>
                         <FiFolderPlus />
                     </IconButton>
                 </Fragment>
@@ -54,7 +50,7 @@ function Topbar(props) {
     }, [props]);
 
     const title = useMemo(() => {
-        switch(params.dashType) {
+        switch(props.match.params.dashType) {
             case 'main': return 'Əsas Kabinet';
             case 'shared': return 'Mənimlə Paylaşılanlar';
             case 'stared': return 'Ulduzladıqlarım';
@@ -63,13 +59,16 @@ function Topbar(props) {
             case 'folder': return 'Qovluq - ' + folderName;
             default: return ''
         }
-    }, [params, folderName]);
+    }, [props.match.params, folderName]);
+
+    const closeModalHandler = useCallback(() => {
+        setModal(null);
+    }, [setModal])
 
     return (
         <Fragment>
-            <FormModal open={formModalOpen} handleClose={() => setFormModalOpen(false)} />
-            <AlertModal open={alertModalOpen} handleClose={() => setAlertModalOpen(false)} />
-            <DownloadModal open={downloadModalOpen} handleClose={() => setDownloadModalOpen(false)} />
+            <AddFolderModal parentFolderId={folderId} open={modal === 'AddFolderModal'} handleClose={closeModalHandler} />
+            <UploadFileModal parentFolderId={folderId} open={modal === 'UploadFileModal'} handleClose={closeModalHandler} />
             <div className={classes.Container}>
                 <div className={classes.TitleDiv}>
                     <p className={classes.Title}>{title}</p>
@@ -94,13 +93,15 @@ function Topbar(props) {
 
 function mapStateToProps(state) {
     return {
-        selected: state.drive.selected,
+        selectedId: state.drive.selectedId,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        onToggleSelect: (id) => dispatch(toggleSelect(id)),
+        onsetSelected: (id, itemType) => dispatch(setSelected(id, itemType)),
+        onDeleteSelected: () => dispatch(deleteSelected()),
+        onStarSelected: () => dispatch(starSelected()),
     };
 }
 

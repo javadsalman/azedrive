@@ -2,7 +2,7 @@ import classes from './FolderSection.module.scss';
 import Folder from './../../../../components/UI/Folder/Folder';
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { toggleSelect } from './../../../../store/actions/driveActions';
+import { setSelected } from './../../../../store/actions/driveActions';
 
 function FolderSection(props) {
 
@@ -13,9 +13,9 @@ function FolderSection(props) {
                 {props.folders.map(folder => {
                     return <Folder 
                         name={folder.name}
-                        click={() => props.ontoggleSelect(folder.id)}
+                        click={() => props.click(folder.id, 'folder', folder.name)}
                         stared={folder.stared} 
-                        selected={props.selected === folder.id}
+                        selected={props.selectedId === folder.id && props.selectedItemType === 'folder'}
                         key={folder.id}/>
                 })}
             </div>
@@ -26,13 +26,14 @@ function FolderSection(props) {
 function mapStateToProps(state) {
     return {
         folders: state.drive.folders,
-        selected: state.drive.selected
+        selectedId: state.drive.selectedId,
+        selectedItemType: state.drive.selectedItemType
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        ontoggleSelect: (id) => dispatch(toggleSelect(id)),
+        onsetSelected: (id, itemType) => dispatch(setSelected(id, itemType)),
     }
 }
 

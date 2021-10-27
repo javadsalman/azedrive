@@ -1,5 +1,4 @@
-
-
+import { LocalStorageAuthUtil } from './utils';
 import iaxios from './../../iaxios';
 
 
@@ -8,16 +7,18 @@ import {
 } from './actionTypes';
 
 
-function setAuthParams(token, username) {
-    if (token) {
-        iaxios.defaults.headers.common['Authorization'] = `Token ${token}`
+const ls = new LocalStorageAuthUtil();
+
+
+function setAuthParams(authData) {
+    if (authData && authData.token) {
+        iaxios.defaults.headers.common['Authorization'] = `Token ${authData.token}`
     }
-    else {
+    else if (authData === null) {
         delete iaxios.defaults.headers.common['Authorization']
     }
     return {
-        token: token,
-        username: username,
+        ...authData,
         type: SET_TOKEN
     };
 }
@@ -26,10 +27,9 @@ export function login(input, password) {
     return dispatch => {
         iaxios.post('/auth/login/', {input, password})
         .then(response => {
-            const {username, token} = response.data
-            localStorage.setItem('token', token)
-            localStorage.setItem('username', username)
-            dispatch(setAuthParams(token, username));
+            const {username, token, id} = response.data
+            ls.setItems({username, token, authId: id});
+            dispatch(setAuthParams({token, username, authId: id}));
         })
     }
 }
@@ -37,8 +37,7 @@ export function login(input, password) {
 export function logout() {
     return dispatch => {
         iaxios.post('/auth/logout/')
-        localStorage.removeItem('token')
-        localStorage.removeItem('username')
+        ls.removeItems('username', 'token', 'authId')
         dispatch(setAuthParams(null));
     }
 }
@@ -47,20 +46,18 @@ export function register(username, email, password) {
     return dispatch => {
         iaxios.post('/auth/register/', {username, email, password})
         .then(response => {
-            const {username, token} = response.data
-            localStorage.setItem('token', token)
-            localStorage.setItem('token', username)
-            dispatch(setAuthParams(token, username));
+            const {username, token, id} = response.data
+            ls.setItems({username, token, authId: id})
+            dispatch(setAuthParams({token, username, authId: id}));
         })
     }
 }
 
 export function checkAuth() {
     return dispatch => {
-        const token = localStorage.getItem('token')
-        const username = localStorage.getItem('username')
-        if (token) {
-            dispatch(setAuthParams(token, username));
+        const authData = ls.getItems();
+        if (authData.token) {
+            dispatch(setAuthParams(authData));
         }
     }
 }

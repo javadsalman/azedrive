@@ -19,24 +19,24 @@ function FileIcon(props) {
         switch(props.type) {
             case 'pdf':
                 return <BsFillFileEarmarkPdfFill className={classes[props.type]}/>
-            case 'doc':
+            case 'word':
                 return <BsFillFileEarmarkWordFill className={classes[props.type]}/>
-            case 'xml':
+            case 'excel':
                 return <BsFillFileEarmarkExcelFill className={classes[props.type]}/>
-            case 'ppt':
+            case 'slide':
                 return <BsFillFileEarmarkPptFill className={classes[props.type]}/>
-            case 'txt':
+            case 'text':
                 return <BsFillFileEarmarkFontFill className={classes[props.type]}/>
-            case 'zip':
+            case 'archive':
                 return <BsFillFileEarmarkZipFill className={classes[props.type]}/>
             case 'image':
                 return <BsFillFileEarmarkImageFill className={classes[props.type]}/>
-            case 'music':
+            case 'audio':
                 return <BsFillFileEarmarkMusicFill className={classes[props.type]}/>
             case 'video':
                 return <BsFillFileEarmarkPlayFill className={classes[props.type]}/>
             default:
-                return <BsFillFileEarmarkFill className={classes.default}/>
+                return <BsFillFileEarmarkFill className={classes.undefined}/>
         }
     }, [props.type])
     return <span style={{fontSize: props.size}}>{icon}</span>

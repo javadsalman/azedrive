@@ -17,16 +17,16 @@ function CommentSection(props) {
                     />
             </div>
             <div className={classes.CommentsDiv}>
-                <Comment />
+                <Comment content="Çox xoşuma gəldi bu aplikasiya. İşlərinizin davamını arzulayıram"/>
             </div>
             <div className={classes.CommentsDiv}>
-                <Comment />
+                <Comment content="Çox xoşuma gəldi bu aplikasiya. İşlərinizin davamını arzulayıram"/>
             </div>
             <div className={classes.CommentsDiv}>
-                <Comment />
+                <Comment content="Çox xoşuma gəldi bu aplikasiya. İşlərinizin davamını arzulayıram"/>
             </div>
             <div className={classes.CommentsDiv}>
-                <Comment />
+                <Comment content="Çox xoşuma gəldi bu aplikasiya. İşlərinizin davamını arzulayıram"/>
             </div>
         </div>
     )

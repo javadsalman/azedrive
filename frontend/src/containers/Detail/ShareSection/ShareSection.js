@@ -11,7 +11,7 @@ function ShareSection(props) {
                     <Divider />
                     <nav aria-label="secondary mailbox folders" className={classes.Nav}>
                         <List>
-                            <ListItem disablePadding>
+                            <ListItem disablePadding selected>
                                 <ListItemButton>
                                     <ListItemText primary="Trash" />
                                 </ListItemButton>
@@ -95,7 +95,7 @@ function ShareSection(props) {
                         fullWidth
                         size="large"
                         variant="contained">
-                        İstifadəçi əlavə et
+                        İstifadəçi Əlavə Et
                     </Button>
                 </div>
                 <div className={classes.DeleteButtonDiv}>
@@ -103,7 +103,7 @@ function ShareSection(props) {
                         fullWidth
                         size="large"
                         variant="contained">
-                        İstifadəçi sil
+                        İstifadəçiləri Sil
                     </Button>
                 </div>
                 <div className={classes.ToggleCommentFeature}>
