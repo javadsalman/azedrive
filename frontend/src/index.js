@@ -15,7 +15,12 @@ const rootReducer = combineReducers({
     drive: driveReducer
 });
 
-const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(applyMiddleware(thunk)));
+let store;
+if (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
+    store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(applyMiddleware(thunk)));
+else
+    store = createStore(rootReducer, applyMiddleware(thunk));
+
 
 ReactDOM.render(
     <React.StrictMode>

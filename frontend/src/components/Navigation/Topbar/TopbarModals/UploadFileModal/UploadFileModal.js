@@ -3,7 +3,7 @@ import classes from './UploadFileModal.module.scss'
 import { useCallback, useRef, useState } from 'react';
 import iaxios from '../../../../../iaxios';
 import { connect } from 'react-redux';
-import { addFileAction } from "../../../../../store/actions/driveActions";
+import { addFileAction, loadTotalSize } from "../../../../../store/actions/driveActions";
 
 function UploadFileModal(props) {
     const [file, setFile] = useState(null);
@@ -29,6 +29,7 @@ function UploadFileModal(props) {
             }}
         ).then(response => {
             props.onAddFile(response.data);
+            props.onLoadTotalSize();
         })
         props.handleClose();
         setFile('');
@@ -76,7 +77,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        onAddFile: (newFile) => dispatch(addFileAction(newFile))
+        onAddFile: (newFile) => dispatch(addFileAction(newFile)),
+        onLoadTotalSize: () => dispatch(loadTotalSize()),
     };
 };
 

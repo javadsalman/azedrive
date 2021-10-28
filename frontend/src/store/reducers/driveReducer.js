@@ -1,10 +1,23 @@
+import { 
+    SET_LOADING, 
+    SET_SELECTED, 
+    SET_FILES, 
+    SET_FOLDERS, 
+    ADD_FOLDER, 
+    ADD_FILE, 
+    DELETE_FOLDER, 
+    DELETE_FILE, 
+    STAR_FOLDER, 
+    STAR_FILE, 
+    SET_TOTAL_SIZE 
+} from './../actions/actionTypes';
 
-import { SET_LOADING, SET_SELECTED, SET_FILES, SET_FOLDERS, ADD_FOLDER, ADD_FILE, DELETE_FOLDER, DELETE_FILE, STAR_FOLDER, STAR_FILE } from './../actions/actionTypes';
 const initialState = {
     selectedId: '',
     selectedItemType: '',
-    totalStorage: 120,
     loading: false,
+    totalSize: null,
+    totalSizeLimit: null,
     folders: [
     ],
     files: [
@@ -17,6 +30,10 @@ const setSelected = (state, action) => {
 
 const setLoading = (state, action) => {
     return {...state, loading: action.loadingValue}
+}
+
+const setTotalSize = (state, action) => {
+    return {...state, totalSize: action.totalSize, totalSizeLimit: action.totalSizeLimit}
 }
 
 const setFiles = (state, action) => {
@@ -69,6 +86,7 @@ function driveReducer(state=initialState, action) {
     switch(action.type) {
         case SET_SELECTED: return setSelected(state, action);
         case SET_LOADING: return setLoading(state, action);
+        case SET_TOTAL_SIZE:  return setTotalSize(state, action);
         case SET_FILES: return setFiles(state, action);
         case SET_FOLDERS: return setFolders(state, action);
         case ADD_FOLDER: return addFolder(state, action);

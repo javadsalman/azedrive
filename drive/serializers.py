@@ -1,4 +1,4 @@
-from django.db.models import fields
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Folder, File, Comment
 
@@ -42,11 +42,11 @@ class FileDetailSerializer(serializers.ModelSerializer):
     stared = serializers.SerializerMethodField()
     username = serializers.CharField(source='author.username')
     folderName = serializers.SerializerMethodField()
+    commentOn = serializers.BooleanField(source='comment_on')
 
     class Meta:
         model = File
-        # exclude = ['folder', 'description', 'stared_users', 'deleted', 'file_object', 'mime_type', 'users', 'stared']
-        fields = ['author', 'downloadUrl', 'id', 'name', 'stared', 'username', 'folder', 'folderName', 'description', 'size', 'type', 'created']
+        fields = ['author', 'downloadUrl', 'id', 'name', 'stared', 'username', 'folder', 'folderName', 'description', 'size', 'type', 'commentOn', 'created']
         read_only_fields = ['id', 'created', 'author']
 
     def get_stared(self, obj):
@@ -56,7 +56,12 @@ class FileDetailSerializer(serializers.ModelSerializer):
         folder = obj.folder
         return folder.name if folder else None
 
-# class FileUploadSerializer(serializers.)
+class SharedUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username']
+        read_only_fields = ['id', 'username']
+
 
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -84,6 +89,11 @@ class FolderSerializer(serializers.ModelSerializer):
         return data
 
 class CommentSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='author.username', required=False)
     class Meta:
         model = Comment
-        fields = '__all__'
+        exclude = ['created']
+        read_only_fields = ['author', 'created', 'username']
+        extra_kwargs = {
+            'file': {'write_only': True, 'required': False}
+        }

@@ -36,9 +36,9 @@ export function login(input, password) {
 
 export function logout() {
     return dispatch => {
+        dispatch(setAuthParams(null));
         iaxios.post('/auth/logout/')
         ls.removeItems('username', 'token', 'authId')
-        dispatch(setAuthParams(null));
     }
 }
 
@@ -58,6 +58,9 @@ export function checkAuth() {
         const authData = ls.getItems();
         if (authData.token) {
             dispatch(setAuthParams(authData));
+        }
+        else {
+            dispatch(setAuthParams(null))
         }
     }
 }

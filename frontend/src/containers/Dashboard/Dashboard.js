@@ -12,7 +12,6 @@ function Dashboard(props) {
 
     const { dashType } = props.match.params
     const { folderId } = queryString.parse(props.location.search)
-    console.log(props)
     const itemClickHandler = useCallback((id, itemType, name) => {
         props.onSetSelected(id, itemType);
         if (id === props.selectedId && itemType === props.selectedItemType) {

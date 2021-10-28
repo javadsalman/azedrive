@@ -9,8 +9,13 @@ import Divider from '@mui/material/Divider';
 import { FiHardDrive, FiShare2, FiStar, FiTrash2 } from 'react-icons/fi'
 import classes from './Sidebar.module.scss';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { useMemo } from 'react';
 
-function BasicList() {
+function BasicList(props) {
+    const filledMemoryPercentage = useMemo(() => {
+        return (props.totalSize / props.totalSizeLimit) * 100
+    }, [props.totalSize, props.totalSizeLimit]);
     return (
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             <nav aria-label="main mailbox folders">
@@ -71,10 +76,13 @@ function BasicList() {
                         <div className={classes.Total}>
                             <div
                                 className={classes.Filled}
-                                style={{ width: '50%' }}
+                                style={{ width: `${filledMemoryPercentage}%` }}
                             ></div>
                         </div>
-                        <p className={classes.StorageAmount}><span className={classes.AmountNumber}>120MB / 500MB</span> istifadə edilir</p>
+                        <p className={classes.StorageAmount}>
+                            <span className={classes.AmountNumber}>
+                                {props.totalSize}MB / {props.totalSizeLimit}MB 
+                            </span> istifadə edilir</p>
                     </div>
                 </List>
             </nav>
@@ -82,4 +90,11 @@ function BasicList() {
     );
 }
 
-export default BasicList
+function mapStateToProps(state) {
+    return {
+        totalSize: state.drive.totalSize,
+        totalSizeLimit: state.drive.totalSizeLimit
+    };
+}
+
+export default connect(mapStateToProps)(BasicList);

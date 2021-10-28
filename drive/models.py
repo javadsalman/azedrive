@@ -26,10 +26,10 @@ class File(models.Model):
     mime_type = models.CharField(max_length=100, null=True, blank=True)
     comment_on = models.BooleanField(default=True)
     description = models.CharField(max_length=150, null=True, blank=True)
-    users = models.ManyToManyField(User, related_name='shared_files')
+    shared_users = models.ManyToManyField(User, related_name='shared_files')
     size = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
-    file_object = models.FileField(upload_to=file_direcotory_path, null=True, blank=True)
+    file_object = models.FileField(upload_to=file_direcotory_path)
 
     def save(self, *args, **kwargs):
         self.type = detect_file_type(self.name)
@@ -41,12 +41,12 @@ class File(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    file_item = models.ForeignKey(File, on_delete=models.CASCADE)
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
 
     class Meta:
-        ordering = ['created']
+        ordering = ['-created']
 
     

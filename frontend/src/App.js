@@ -9,21 +9,12 @@ import Detail from './containers/Detail/Detail';
 import Auth from './containers/Auth/Auth';
 import { connect } from 'react-redux';
 import { checkAuth } from './store/actions/authActions';
-// import iaxios from './iaxios';
 
 function App(props) {
     useEffect(() => {
         props.onCheckAuth();
-        // const resInterceptor = iaxios.interceptors.response.use(res=>res, error => {
-        //     console.log(error)
-        // })
-
-        // return () => {
-        //     iaxios.interceptors.response.reject(resInterceptor);
-        // }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [props.onCheckAuth])
 
 
     const routes = useMemo(() => {
@@ -79,7 +70,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        onCheckAuth: () => dispatch(checkAuth())
+        onCheckAuth: () => dispatch(checkAuth()),
     };
 }
 

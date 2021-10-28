@@ -7,17 +7,17 @@ import BlockSpinner from '../../components/UI/Spinner/BlockSpinner/BlockSpinner'
 import { useState, useEffect, useCallback } from 'react';
 import queryString from 'query-string';
 import iaxios from './../../iaxios';
+import { connect } from 'react-redux';
 
 function Detail(props) {
     const [loading, setLoading] = useState(false);
     const [fileInfo, setFileInfo] = useState({});
-
+    
     const {fileId} = queryString.parse(props.location.search)
     useEffect(() => {
         setLoading(true);
         iaxios.get(`/filelist/${fileId}/`)
         .then(response => {
-            console.log(response.data)
             setFileInfo(response.data);
             setLoading(false);
         })
@@ -45,7 +45,17 @@ function Detail(props) {
             }
             props.history.push(url);
         })
-    }, [props.history, fileId, fileInfo])
+    }, [props.history, fileId, fileInfo]);
+
+    const changeCommentOnStatus = useCallback(() => {
+        setLoading(true);
+        iaxios.patch(`/filelist/${fileId}/`, {
+            'commentOn': !fileInfo.commentOn
+        }).then(response => {
+            setFileInfo(response.data);
+            setLoading(false);
+        }).catch(error => setLoading(false));
+    }, [fileId, fileInfo.commentOn]);
 
     return (
         <div className={classes.Container}>
@@ -101,17 +111,41 @@ function Detail(props) {
                 </div>
 
                 <div className={classes.SharedDiv}>
-                    <ShareSection fileId={fileId}/>
+                    {
+                        props.authId === fileInfo.author
+                        ?
+                        <ShareSection 
+                            fileId={fileId}
+                            changeCommentOn={changeCommentOnStatus} 
+                            commentOn={fileInfo.commentOn}/>
+                        :
+                        null
+                    }
                 </div>
             </div>
             <div className={classes.CommentDiv}>
-                <CommentSection fileId={fileId}/>
+                {fileInfo.commentOn
+                    ?
+                    <CommentSection 
+                        authId={props.authId} 
+                        isOwner={props.authId === fileInfo.author}
+                        fileId={fileId}
+                    />
+                    :
+                    null
+                }
             </div>
         </div>
     )
 }
 
-export default Detail;
+function mapStateToProps(state) {
+    return {
+        authId: Number(state.auth.authId)
+    };
+};
+
+export default connect(mapStateToProps)(Detail);
 
 function sizeCalculate(size) {
     if (size < 1024) {

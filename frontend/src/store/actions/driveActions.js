@@ -1,6 +1,6 @@
 import iaxios from './../../iaxios';
 
-import { 
+import {
     ADD_FILE,
     ADD_FOLDER,
     DELETE_FILE,
@@ -10,7 +10,8 @@ import {
     SET_LOADING,
     STAR_FILE,
     STAR_FOLDER,
-    SET_SELECTED
+    SET_SELECTED,
+    SET_TOTAL_SIZE
 } from './actionTypes';
 
 
@@ -26,6 +27,25 @@ function setLoadingAction(loadingValue) {
     return {
         type: SET_LOADING,
         loadingValue
+    };
+};
+
+function setTotalSizeAction(totalSize, totalSizeLimit) {
+    return {
+        type: SET_TOTAL_SIZE,
+        totalSize,
+        totalSizeLimit
+    };
+};
+
+export function loadTotalSize() {
+    return dispatch => {
+        iaxios.get('/totalsize/').then(response => {
+            dispatch(setTotalSizeAction(
+                response.data.totalSize,
+                response.data.totalSizeLimit
+            ));
+        });
     };
 };
 
@@ -52,14 +72,14 @@ const defaultLoadSettings = {
 };
 export function loadDashboard(customLoadSettings) {
     return async (dispatch, getState) => {
-        const loadSettings = {...defaultLoadSettings, ...customLoadSettings};
-        const filterParams = {parentFolder: null, deleted: false};
+        const loadSettings = { ...defaultLoadSettings, ...customLoadSettings };
+        const filterParams = { parentFolder: null, deleted: false };
         const authId = getState().auth.authId;
 
         if (loadSettings.shared) {
-            filterParams['users'] = authId;
+            filterParams['sharedUser'] = authId;
         }
-        else if (loadSettings.shared === false) {
+        else {
             filterParams['author'] = authId;
         }
 
@@ -79,7 +99,7 @@ export function loadDashboard(customLoadSettings) {
             filterParams['parentFolderNull'] = true;
         }
 
-        const resultParams = {params: filterParams}
+        const resultParams = { params: filterParams }
 
         dispatch(setSelected(null, null));
         dispatch(setLoadingAction(true));
@@ -99,6 +119,8 @@ export function loadDashboard(customLoadSettings) {
             dispatch(setFilesAction({}));
             dispatch(setFoldersAction(folderResponse.data));
         }
+
+        dispatch(loadTotalSize());
         dispatch(setLoadingAction(false));
     }
 }
@@ -112,10 +134,10 @@ function addFolderAction(newFolder) {
 
 export function addFolder(folderName, parentFolderId) {
     return dispatch => {
-        iaxios.post('/folderlist/', {name: folderName, folder: parentFolderId})
-        .then(response => {
-            dispatch(addFolderAction(response.data));
-        })
+        iaxios.post('/folderlist/', { name: folderName, folder: parentFolderId })
+            .then(response => {
+                dispatch(addFolderAction(response.data));
+            })
     }
 }
 
@@ -143,20 +165,21 @@ function deleteFileAction(deletedFileId) {
 
 export function deleteSelected() {
     return (dispatch, getState) => {
-        const {selectedId, selectedItemType} = getState().drive
+        const { selectedId, selectedItemType } = getState().drive
         if (selectedItemType === 'folder') {
             iaxios.delete(`/folderlist/${selectedId}/`)
-            .then(response => {
-                dispatch(deleteFolderAction(selectedId));
-                dispatch(setSelected(null, null));
-            });
+                .then(response => {
+                    dispatch(deleteFolderAction(selectedId));
+                    dispatch(setSelected(null, null));
+                });
         }
         else if (selectedItemType === 'file') {
             iaxios.delete(`/filelist/${selectedId}/`)
-            .then(response => {
-                dispatch(deleteFileAction(selectedId))
-                dispatch(setSelected(null, null));
-            });
+                .then(response => {
+                    dispatch(deleteFileAction(selectedId))
+                    dispatch(setSelected(null, null));
+                    dispatch(loadTotalSize());
+                });
         }
     };
 };
@@ -181,22 +204,22 @@ function setStarFolderAction(folderId, newStarStatus) {
 
 export function starSelected() {
     return (dispatch, getState) => {
-        const {selectedId, selectedItemType, files, folders} = getState().drive
+        const { selectedId, selectedItemType, files, folders } = getState().drive
         if (selectedItemType === 'folder') {
             const selectedFolder = folders.find(folder => folder.id === selectedId);
             const staredStatus = selectedFolder.stared
-            iaxios.patch(`/folderlist/${selectedId}/`, {stared: !staredStatus})
-            .then(response => {
-                dispatch(setStarFolderAction(selectedId, response.data.stared));
-            })
+            iaxios.patch(`/folderlist/${selectedId}/`, { stared: !staredStatus })
+                .then(response => {
+                    dispatch(setStarFolderAction(selectedId, response.data.stared));
+                })
         }
         else if (selectedItemType === 'file') {
             const selectedFile = files.find(file => file.id === selectedId);
             const staredStatus = selectedFile.stared
-            iaxios.put(`/filelist/${selectedId}/filestar/`, {stared: !staredStatus})
-            .then(response => {
-                dispatch(setStarFileAction(selectedId, response.data.stared));
-            })
+            iaxios.put(`/filelist/${selectedId}/filestar/`, { stared: !staredStatus })
+                .then(response => {
+                    dispatch(setStarFileAction(selectedId, response.data.stared));
+                })
         }
     }
 }

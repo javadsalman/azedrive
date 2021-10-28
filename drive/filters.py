@@ -6,9 +6,10 @@ class FileFilter(filters.FilterSet):
     parentFolderNull = filters.BooleanFilter(field_name='folder', lookup_expr='isnull')
     parentFolder = filters.NumberFilter(field_name='folder')
     staredUser = filters.NumberFilter(field_name='stared_users')
+    sharedUser = filters.NumberFilter(field_name='shared_users')
     class Meta:
         model = File
-        fields = ['author', 'deleted', 'users']
+        fields = ['author', 'deleted']
 
 
 class FolderFilter(filters.FilterSet):
