@@ -95,6 +95,9 @@ export function loadDashboard(customLoadSettings) {
         if (loadSettings.parentFolder) {
             filterParams['parentFolder'] = loadSettings.parentFolder;
         }
+        else if (loadSettings.shared || loadSettings.stared) {
+            delete filterParams['parentFolder']
+        }
         else if (loadSettings.parentFolder === null) {
             filterParams['parentFolderNull'] = true;
         }

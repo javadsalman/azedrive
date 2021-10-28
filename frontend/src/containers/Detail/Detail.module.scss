@@ -27,6 +27,7 @@
             flex-direction: column;
             background-color: white;
             border: 1px solid rgba(0, 0, 0, 0.12);
+            word-wrap: break-word;
             @include padding-y(30px);
             
             .IconDiv {
