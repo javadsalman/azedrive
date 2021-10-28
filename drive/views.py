@@ -28,8 +28,6 @@ from .serializers import (
     SharedUserSerializer
 )
 
-# print('\n\n\n\n', file_path, '\n\n\n\n')
-
 # Create your views here.
 
 

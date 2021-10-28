@@ -19,13 +19,11 @@ function ShareSection(props) {
     const listButtonClickHandler = useCallback((userId) => {
         setSelectedList(prevState => {
             if (prevState.includes(userId)) {
-                console.log('in', prevState.filter(e => e !== userId))
                 return prevState.filter(e => e !== userId)
             }
             else {
                 const newState = prevState.slice()
                 newState.push(userId);
-                console.log('not in ', newState)
                 return newState;
             }
         });

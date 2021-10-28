@@ -33,7 +33,6 @@ function CommentSection(props) {
         iaxios.delete(`/filelist/${props.fileId}/commentlist/${commentId}/`)
         .then(response => {
             setComments(prevState => {
-                console.log(prevState, commentId)
                 return prevState.filter(comment => comment.id!==commentId);
             });
         });

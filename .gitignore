@@ -5,6 +5,7 @@ db.sqlite3
 media/*
 */migrations/*
 !*/migrations/__init__.py
+.vscode
 
 # Frontend
 
