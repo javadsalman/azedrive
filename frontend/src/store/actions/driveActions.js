@@ -86,6 +86,7 @@ export function loadDashboard(customLoadSettings) {
         if (loadSettings.stared) {
             filterParams['staredUser'] = authId;
             filterParams['stared'] = true;
+            delete filterParams['author']
         }
 
         if (loadSettings.deleted) {
@@ -95,7 +96,7 @@ export function loadDashboard(customLoadSettings) {
         if (loadSettings.parentFolder) {
             filterParams['parentFolder'] = loadSettings.parentFolder;
         }
-        else if (loadSettings.shared || loadSettings.stared) {
+        else if (loadSettings.noParentFolder) {
             delete filterParams['parentFolder']
         }
         else if (loadSettings.parentFolder === null) {

@@ -44,13 +44,13 @@ function Dashboard(props) {
                     props.onLoadDashboard();
                     break;
                 case 'shared':
-                    props.onLoadDashboard({shared: true, contentType: 'file'});
+                    props.onLoadDashboard({shared: true, contentType: 'file', noParentFolder: true});
                     break;
                 case 'stared':
-                    props.onLoadDashboard({stared: true});
+                    props.onLoadDashboard({stared: true, noParentFolder: true});
                     break;
                 case 'trash':
-                    props.onLoadDashboard({deleted: true});
+                    props.onLoadDashboard({deleted: true, noParentFolder: true});
                     break;
                 case 'folder':
                     props.onLoadDashboard({parentFolder: folderId});
