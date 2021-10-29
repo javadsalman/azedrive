@@ -1,6 +1,6 @@
 # ☁ AZEDRIVE - GOOGLE DRIVE LIKE CLOUD APP ☁
 Used Languages: [Python](https://www.python.org), [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript?retiredLocale=tr), [SCSS](https://sass-lang.com/guide)  *(Stylesheet Language)* \
-Used Frameworks and Libraries: [Django](https://www.djangoproject.com/), [Django Rest Framework](https://www.django-rest-framework.org/), [React](https://reactjs.org/), [MaterialUI](https://mui.com/) \
+Used Frameworks and Libraries: [Django](https://www.djangoproject.com/), [Django Rest Framework](https://www.django-rest-framework.org/), [React](https://reactjs.org/), [MaterialUI](https://mui.com/)
 
 ![MAIN IMAGE](https://github.com/cavadsalman/azedrive/blob/main/screenshots/dashboard_main.JPG)
 ## ⚙ SETUP
