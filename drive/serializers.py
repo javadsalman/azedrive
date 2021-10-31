@@ -46,7 +46,7 @@ class FileDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = File
-        fields = ['author', 'downloadUrl', 'id', 'name', 'stared', 'username', 'folder', 'folderName', 'description', 'size', 'type', 'commentOn', 'created']
+        fields = ['author', 'downloadUrl', 'id', 'name', 'stared', 'username', 'folder', 'deleted', 'folderName', 'description', 'size', 'type', 'commentOn', 'created']
         read_only_fields = ['id', 'created', 'author']
 
     def get_stared(self, obj):

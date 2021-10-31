@@ -1,17 +1,17 @@
 import { IconButton, Stack } from "@mui/material";
 import Divider from '@mui/material/Divider';
 import { Fragment, useCallback, useMemo, useState } from "react";
-import { FiFilePlus, FiFolderPlus, FiTrash2, FiX, FiStar } from 'react-icons/fi';
+import { FiFilePlus, FiFolderPlus, FiTrash2, FiX, FiStar, FiRotateCcw } from 'react-icons/fi';
 import classes from './Topbar.module.scss';
 import { connect } from 'react-redux';
-import { setSelected, deleteSelected, starSelected } from './../../../store/actions/driveActions';
+import { setSelected, deleteSelected, starSelected, restore } from './../../../store/actions/driveActions';
 import queryString from 'query-string';
 import AddFolderModal from './TopbarModals/AddFolderModal/AddFolderModal';
 import UploadFileModal from './TopbarModals/UploadFileModal/UploadFileModal';
 
 function Topbar(props) {
     const [modal, setModal] = useState(null);
-    const {folderName, folderId} = queryString.parse(props.location.search)
+    const { folderName, folderId } = queryString.parse(props.location.search)
 
     const iconButtons = useMemo(() => {
         if (props.match.params.dashType === 'detail') {
@@ -20,6 +20,18 @@ function Topbar(props) {
         else if (props.selectedId) {
             return (
                 <Fragment>
+                    {
+                        props.match.params.dashType === 'trash'
+                        ?
+                        <Fragment>
+                            <IconButton aria-label="disselect" onClick={props.onRestore}>
+                                <FiRotateCcw />
+                            </IconButton>
+                            <Divider orientation="vertical" flexItem />
+                        </Fragment>
+                        :
+                        null
+                    }
                     <IconButton aria-label="star" onClick={props.onStarSelected}>
                         <FiStar />
                     </IconButton>
@@ -50,7 +62,7 @@ function Topbar(props) {
     }, [props]);
 
     const title = useMemo(() => {
-        switch(props.match.params.dashType) {
+        switch (props.match.params.dashType) {
             case 'main': return 'Əsas Kabinet';
             case 'shared': return 'Mənimlə Paylaşılanlar';
             case 'stared': return 'Ulduzladıqlarım';
@@ -102,6 +114,7 @@ function mapDispatchToProps(dispatch) {
         onsetSelected: (id, itemType) => dispatch(setSelected(id, itemType)),
         onDeleteSelected: () => dispatch(deleteSelected()),
         onStarSelected: () => dispatch(starSelected()),
+        onRestore: () => dispatch(restore()),
     };
 }
 

@@ -168,11 +168,13 @@ class ShareView(views.APIView):
 
 
 class FolderListAV(generics.ListCreateAPIView):
-    queryset = Folder.objects.all()
     serializer_class = FolderSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = FolderFilter
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Folder.objects.filter(author=self.request.user)
 
     def create(self, request):
         serializer = self.serializer_class(data=request.data, context={'request': request})

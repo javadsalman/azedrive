@@ -14,3 +14,4 @@ export const DELETE_FILE = 'DELETE_FILE';
 export const STAR_FOLDER = 'STAR_FOLDER';
 export const STAR_FILE = 'STAR_FILE';
 export const SET_TOTAL_SIZE = 'SET_TOTAL_SIZE';
+export const RESTORE_ACTION = 'RESTORE_ACTION';

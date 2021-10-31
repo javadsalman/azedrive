@@ -227,3 +227,24 @@ export function starSelected() {
         }
     }
 }
+
+
+export function restore() {
+    return (dispatch, getState) => {
+        const { selectedId, selectedItemType } = getState().drive;
+        if (selectedItemType === 'folder') {
+            iaxios.patch(`/folderlist/${selectedId}/`, {deleted: false})
+                .then(response => {
+                    dispatch(deleteFolderAction(selectedId));
+                    dispatch(setSelected(null, null));
+                });
+        }
+        else if (selectedItemType === 'file') {
+            iaxios.patch(`/filelist/${selectedId}/`, {deleted: false})
+                .then(response => {
+                    dispatch(deleteFileAction(selectedId))
+                    dispatch(setSelected(null, null));
+                });
+        }
+    }
+}
