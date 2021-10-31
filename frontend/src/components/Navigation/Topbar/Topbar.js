@@ -12,30 +12,39 @@ import UploadFileModal from './TopbarModals/UploadFileModal/UploadFileModal';
 function Topbar(props) {
     const [modal, setModal] = useState(null);
     const { folderName, folderId } = queryString.parse(props.location.search)
+    const dashType = props.match.params.dashType;
 
     const iconButtons = useMemo(() => {
-        if (props.match.params.dashType === 'detail') {
+        if (dashType === 'detail') {
             return null;
         }
         else if (props.selectedId) {
             return (
                 <Fragment>
                     {
-                        props.match.params.dashType === 'trash'
-                        ?
-                        <Fragment>
-                            <IconButton aria-label="disselect" onClick={props.onRestore}>
-                                <FiRotateCcw />
-                            </IconButton>
-                            <Divider orientation="vertical" flexItem />
-                        </Fragment>
-                        :
-                        null
+                        dashType === 'trash'
+                            ?
+                            <Fragment>
+                                <IconButton aria-label="disselect" onClick={props.onRestore}>
+                                    <FiRotateCcw />
+                                </IconButton>
+                                <Divider orientation="vertical" flexItem />
+                            </Fragment>
+                            :
+                            null
                     }
-                    <IconButton aria-label="star" onClick={props.onStarSelected}>
-                        <FiStar />
-                    </IconButton>
-                    <Divider orientation="vertical" flexItem />
+                    {
+                        dashType !== 'trash'
+                            ?
+                            <Fragment>
+                                <IconButton aria-label="star" onClick={props.onStarSelected}>
+                                    <FiStar />
+                                </IconButton>
+                                <Divider orientation="vertical" flexItem />
+                            </Fragment>
+                            :
+                            null
+                    }
                     <IconButton aria-label="delete" onClick={props.onDeleteSelected}>
                         <FiTrash2 />
                     </IconButton>
@@ -46,7 +55,7 @@ function Topbar(props) {
                 </Fragment>
             );
         }
-        else {
+        else if (['main', 'folder'].includes(dashType)) {
             return (
                 <Fragment>
                     <IconButton aria-label="addFile" onClick={() => setModal('UploadFileModal')}>
@@ -59,10 +68,10 @@ function Topbar(props) {
                 </Fragment>
             );
         }
-    }, [props]);
+    }, [props, dashType]);
 
     const title = useMemo(() => {
-        switch (props.match.params.dashType) {
+        switch (dashType) {
             case 'main': return 'Əsas Kabinet';
             case 'shared': return 'Mənimlə Paylaşılanlar';
             case 'stared': return 'Ulduzladıqlarım';
@@ -71,7 +80,7 @@ function Topbar(props) {
             case 'folder': return 'Qovluq - ' + folderName;
             default: return ''
         }
-    }, [props.match.params, folderName]);
+    }, [dashType, folderName]);
 
     const closeModalHandler = useCallback(() => {
         setModal(null);
