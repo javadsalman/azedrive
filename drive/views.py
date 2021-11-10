@@ -3,7 +3,6 @@ from django.db.models.aggregates import Sum
 from rest_framework import generics, views, parsers, status, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.authentication import get_authorization_header
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
@@ -13,7 +12,7 @@ from re import compile
 from .filters import FileFilter, FolderFilter
 from .models import File, Folder
 
-from drive.permissions import (
+from .permissions import (
     CommentDetailPermission, 
     IsAuthorOrShared, 
     IsAuthorOrSharedReadOnly, 

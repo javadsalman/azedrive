@@ -42,9 +42,13 @@ function ShareSection(props) {
         iaxios.post(`/filelist/${props.fileId}/sharedusers/`, { input: input })
             .then(response => {
                 setSharedList(prevState => {
-                    const newState = prevState.slice();
-                    newState.unshift(response.data);
-                    return newState;
+                    if (prevState.findIndex(e => e.id === response.data.id) === -1) {
+                        const newState = prevState.slice();
+                        newState.unshift(response.data);
+                        return newState;
+                    } else {
+                        return prevState;
+                    }
                 });
                 setInput('');
             });
