@@ -4,12 +4,12 @@ Used Frameworks and Libraries: [Django](https://www.djangoproject.com/), [Django
 
 ![MAIN IMAGE](https://github.com/cavadsalman/azedrive/blob/main/screenshots/dashboard_main.JPG)
 ## ⚙ SETUP
-1. Create base dir of project
+1. Create base dir for project
 ```
 > mkdir projectbase
 > cd projectbase
 ```
-2. Create virtual environment and activate
+2. Create a virtual environment and activate it
 ```
 > py -m venv projectenv
 > projectenv\Scripts\activate
@@ -19,7 +19,7 @@ Used Frameworks and Libraries: [Django](https://www.djangoproject.com/), [Django
 > git clone https://github.com/cavadsalman/azedrive.git
 > cd azedrive
 ```
-4. Change database settings from settings.py based on your own
+4. Change the default database configurations from settings.py based on your own
 ```python
 'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -30,13 +30,13 @@ Used Frameworks and Libraries: [Django](https://www.djangoproject.com/), [Django
         'PORT': '5432',
 },
 ```
-5. Create database in PostgreSQL. By the way the database choosing is up to you, you can create database on any SQL database which supported by Django
+5. Create a database in PostgreSQL. By the way the database choosing is up to you, you can create database on any SQL database which is supported by Django
 ```
 > psql -U postgres -h localhost
 > CREATE DATABASE azedrive_db;
 > \q
 ```
-6. Install required libraries, migrate main and secondary database (for save login logs) and run server
+6. Install the required libraries, migrate the main and secondary databases (for save login logs) and run server
 ```
 > pip install -r requirements.txt
 > py manage.py makemigrations
@@ -44,7 +44,7 @@ Used Frameworks and Libraries: [Django](https://www.djangoproject.com/), [Django
 > py manage.py migrate --database=logdb
 > py manage.py runserver
 ```
-7. Backend finished. Now open new CMD and change directory to frontend folder. Afterwards install all required node modules
+7. Backend completed! Now open a new CMD and change the directory to frontend folder. Afterwards install all required node modules
 ```
 > cd frontend
 > npm install
