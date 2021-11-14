@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'drive',
     'user',
     #external apps
-    'django_cleanup',
-    'corsheaders',
+    'django_cleanup', # deleting media files when the related model record deleted
+    'corsheaders', # Django app for handling the server headers required for Cross-Origin Resource Sharing (CORS)
     'rest_framework',
     'rest_framework.authtoken',
 ]
@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # middlewares for django-cors-headers
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
@@ -89,6 +90,7 @@ WSGI_APPLICATION = 'azedrive.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# Router for second database
 DATABASE_ROUTERS = (
     'user.dbrouters.LoginLogDBRouter',
 )
@@ -163,7 +165,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    # 'DEFAULT_RENDERER_CLASSES': [
-    #     'rest_framework.renderers.JSONRenderer',
-    # ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
 }

@@ -21,17 +21,20 @@ class FileListSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         file = File.objects.create(
             **validated_data,
+            # get author information from request based on token header
             author = self.context['request'].user
         )
         return file
 
     def get_stared(self, obj):
+        # check request user in shared users
         return self.context['request'].user in obj.stared_users.all()
 
     def validate(self, data):
         user = self.context['request'].user
         folder = data['folder']
         name = data['name']
+        # check if the the file with same features exists previously and if yes then raise error
         if File.objects.filter(author=user, folder=folder, name=name):
             raise serializers.ValidationError(f'{name} adlı fayl mövcuddur!')
         return data
@@ -52,6 +55,7 @@ class FileDetailSerializer(serializers.ModelSerializer):
     def get_stared(self, obj):
         return self.context['request'].user in obj.stared_users.all()
 
+    # if folder is null then return None as folder name
     def get_folderName(self, obj):
         folder = obj.folder
         return folder.name if folder else None
@@ -84,6 +88,7 @@ class FolderSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         folder = data.get('folder')
         name = data.get('name')
+        # check if the the folder with same features exists previously and if yes then raise error
         if File.objects.filter(author=user, folder=folder, name=name):
             raise serializers.ValidationError(f'{name} adlı fayl mövcuddur!')
         return data

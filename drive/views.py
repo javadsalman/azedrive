@@ -41,14 +41,20 @@ class FileListAV(generics.ListCreateAPIView):
 
     def list(self, request):
         queryset = self.filter_queryset(self.get_queryset())
+        # pass the request in context for use request also in serializer class
         serializer = self.get_serializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     def create(self, request):
+        # get sum of size column
         total_size = self.queryset.aggregate(total_size = Sum('size'))['total_size']
+        # convert that value to megabyte to find total size
         total_size_mb = total_size / 1048576 if total_size else 0
+        # get uploaded file size
         file_size = int(request.data.get('size', 0))
+        # convert that value to megabyte
         file_size_mb = file_size / 1048576 if file_size else 0
+        # if total size + file size bigger thant total size limit then raise error
         if (total_size_mb + file_size_mb) > self.total_size_limit_mb:
             return Response(
                 {'detail': f'{self.total_size_limit_mb}mb ölçü limiti keçildiyi üçün fayl qəbul edilmədi!'},
@@ -67,6 +73,8 @@ class FileDetailAV(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = FileDetailSerializer
     permission_classes = [permissions.IsAuthenticated, IsAuthorOrSharedDeleteAndReadOnly]
 
+    # if file deleting for first time then set the deleted property to true if it's second time then delete that model instance
+    # if it's shared file then delete request user from shared users list
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         if request.user == instance.author:
@@ -83,6 +91,7 @@ class FileDetailAV(generics.RetrieveUpdateDestroyAPIView):
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
+# view for download the file
 def download(request, pk):
     instance = get_object_or_404(File, pk=pk)
     file_path = instance.file_object.path
@@ -93,6 +102,7 @@ def download(request, pk):
             return response
     raise Http404
 
+# get total size used size and limit
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def total_size(request):
@@ -101,6 +111,7 @@ def total_size(request):
     result = (result_size / 1048576) if result_size else 0
     return Response({'totalSize': round(result, 2), 'totalSizeLimit': FileListAV.total_size_limit_mb})
 
+# make file stared or unstared
 @api_view(['PUT'])
 @permission_classes([permissions.IsAuthenticated])
 def file_star(request, pk):
@@ -121,6 +132,7 @@ def file_star(request, pk):
     serializer = FileDetailSerializer(instance=file, context={'request': request})
     return Response(data=serializer.data ,status=status.HTTP_202_ACCEPTED)
 
+# get shared users of file or delete and add the one
 class ShareView(views.APIView):
     mail_compiler = compile(r'^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$')
     username_compiler = compile(r'^\w+$')
@@ -186,6 +198,7 @@ class FolderDetailAV(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = FolderSerializer
     permission_classes = [permissions.IsAuthenticated, IsAuthorOrSharedReadOnly]
 
+    # if deleted property is false then make it true, if it's true already then delete model instance
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.check_object_permissions(request, instance)
@@ -202,12 +215,14 @@ class CommentListAV(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated, IsAuthorOrShared]
 
+    # get queryset based on spesific file comments
     def get_queryset(self):
         filepk = self.kwargs.get('filepk')
         file = get_object_or_404(File, pk=filepk)
         self.check_object_permissions(self.request, file)
         return file.comment_set.all()
 
+    # get file pk from url and user from request and create new comment with them
     def create(self, request, filepk):
         file = get_object_or_404(File, pk=filepk)
         if not file.comment_on:

@@ -23,7 +23,7 @@ class File(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     deleted = models.BooleanField(default=False)
     type = models.CharField(max_length=10, default='undefined')
-    mime_type = models.CharField(max_length=100, null=True, blank=True)
+    mime_type = models.CharField(max_length=100, null=True, blank=True) # for passing content type when require
     comment_on = models.BooleanField(default=True)
     description = models.CharField(max_length=150, null=True, blank=True)
     shared_users = models.ManyToManyField(User, related_name='shared_files')
@@ -47,6 +47,7 @@ class Comment(models.Model):
 
 
     class Meta:
+        # show recent comments at top
         ordering = ['-created']
 
     
