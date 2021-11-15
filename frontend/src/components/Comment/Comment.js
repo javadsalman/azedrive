@@ -10,28 +10,32 @@ function Comment(props) {
     const open = Boolean(anchorEl);
 
     useEffect(() => {
+        // set the default value of comment to input for change operation
         setText(props.content);
     }, [props.content])
 
     const changeHandler = useCallback((event) => {
         if (event.key === 'Enter') {
             props.changeComment(props.id, text);
-            props.clearChangeId();
+            props.clearMustChangeId();
         }
     }, [props, text]);
 
     const rightButton = useMemo(() => {
-        if (props.deletePermission || props.changePermission) {
-            if (props.shouldChange) {
+        // if user hasn't delete or change permission don't show button
+        if (props.hasDeletePermission || props.hasChangePermission) {
+            // if changing operation continue then set X button for cancel it
+            if (props.mustChange) {
                 return (
                     <IconButton onClick={() => {
-                        props.clearChangeId();
+                        props.clearMustChangeId();
                         setText(props.content);
                     }}>
                         <BsX />
                     </IconButton>
-                )
+                );
             }
+            // else show three dot button for show change and delete buttons
             else {
                 return (
                     <IconButton
@@ -43,7 +47,7 @@ function Comment(props) {
                     >
                         <BsThreeDotsVertical />
                     </IconButton>
-                )
+                );
             }
         }
         else {
@@ -66,7 +70,8 @@ function Comment(props) {
                     <b>{props.username}</b>
                 </div>
                 <div className={classes.ContentDiv}>
-                    {props.shouldChange
+                    {/* if comment must change then show input else show the comment content */}
+                    {props.mustChange
                         ?
                         <TextField
                             variant="standard"
@@ -93,18 +98,18 @@ function Comment(props) {
                     }}
                 >
                     {
-                        props.deletePermission
+                        props.hasDeletePermission
                             ?
                             <MenuItem onClick={props.deleteComment}>Sil</MenuItem>
                             :
                             null
                     }
                     {
-                        props.changePermission
+                        props.hasChangePermission
                             ?
                             <MenuItem
                                 onClick={() => {
-                                    props.setChangeId();
+                                    props.setMustChangeId();
                                     setAnchorEl(null)
                                 }}>
                                 Dəyiş
@@ -115,7 +120,7 @@ function Comment(props) {
                 </Menu>
             </div>
         </div>
-    )
+    );
 }
 
 export default memo(Comment);

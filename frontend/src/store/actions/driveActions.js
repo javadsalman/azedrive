@@ -38,6 +38,7 @@ function setTotalSizeAction(totalSize, totalSizeLimit) {
     };
 };
 
+// load total size and total size limit from api
 export function loadTotalSize() {
     return dispatch => {
         iaxios.get('/totalsize/').then(response => {
@@ -63,28 +64,36 @@ function setFoldersAction(newFolders) {
     };
 };
 
+// default load settings. We need declare these properties before contstruct filterParams object
 const defaultLoadSettings = {
     shared: null,
     stared: false,
     deleted: false,
     parentFolder: null,
     contentType: 'all'
-};
+}; // loadDashboard action load all files and folders to dashboard
 export function loadDashboard(customLoadSettings) {
     return async (dispatch, getState) => {
+        // override defaultLoadSettings with customLoadSettings. loadSettings will use for configure filterParams object
         const loadSettings = { ...defaultLoadSettings, ...customLoadSettings };
         const filterParams = { parentFolder: null, deleted: false };
-        const authId = getState().auth.authId;
+        const userId = getState().auth.userId;
 
+        // if wished shared items then set userId to sharedUser and don't pass author else pass only author
         if (loadSettings.shared) {
-            filterParams['sharedUser'] = authId;
+            filterParams['sharedUser'] = userId;
         }
         else {
-            filterParams['author'] = authId;
+            filterParams['author'] = userId;
         }
 
+        // stare feature stored on database as many to many field. We need loof for which files have this userId in
+        // stared users. So we need pass userId as below
+        // unlike files, folders look for only boolean value of stared property
+        // we need delete author when look for stared items. Because the user can stared others files which shared with
+        // him. So that mean he's not the author of these files.
         if (loadSettings.stared) {
-            filterParams['staredUser'] = authId;
+            filterParams['staredUser'] = userId;
             filterParams['stared'] = true;
             delete filterParams['author']
         }
@@ -93,12 +102,17 @@ export function loadDashboard(customLoadSettings) {
             filterParams['deleted'] = true;
         }
 
+
         if (loadSettings.parentFolder) {
             filterParams['parentFolder'] = loadSettings.parentFolder;
-        }
+        } 
+        // parentFolder property came with deafultLoadSettings object. If the noParentFolder key is true in loadSettings then
+        // delete parentFolder key. It will required when load deleted and shared folders.
+        // Because there is a need ignore parent folders
         else if (loadSettings.noParentFolder) {
-            delete filterParams['parentFolder']
+            delete filterParams['parentFolder'];
         }
+        // if parentFolder value is null then set parentFolderNull key as true. Because the querystring can't hold null info
         else if (loadSettings.parentFolder === null) {
             filterParams['parentFolderNull'] = true;
         }
@@ -141,9 +155,9 @@ export function addFolder(folderName, parentFolderId) {
         iaxios.post('/folderlist/', { name: folderName, folder: parentFolderId })
             .then(response => {
                 dispatch(addFolderAction(response.data));
-            })
-    }
-}
+            });
+    };
+};
 
 export function addFileAction(newFile) {
     return {
@@ -169,7 +183,7 @@ function deleteFileAction(deletedFileId) {
 
 export function deleteSelected() {
     return (dispatch, getState) => {
-        const { selectedId, selectedItemType } = getState().drive
+        const { selectedId, selectedItemType } = getState().drive;
         if (selectedItemType === 'folder') {
             iaxios.delete(`/folderlist/${selectedId}/`)
                 .then(response => {
@@ -180,7 +194,7 @@ export function deleteSelected() {
         else if (selectedItemType === 'file') {
             iaxios.delete(`/filelist/${selectedId}/`)
                 .then(response => {
-                    dispatch(deleteFileAction(selectedId))
+                    dispatch(deleteFileAction(selectedId));
                     dispatch(setSelected(null, null));
                     dispatch(loadTotalSize());
                 });
@@ -208,27 +222,28 @@ function setStarFolderAction(folderId, newStarStatus) {
 
 export function starSelected() {
     return (dispatch, getState) => {
-        const { selectedId, selectedItemType, files, folders } = getState().drive
+        const { selectedId, selectedItemType, files, folders } = getState().drive;
         if (selectedItemType === 'folder') {
             const selectedFolder = folders.find(folder => folder.id === selectedId);
-            const staredStatus = selectedFolder.stared
-            iaxios.patch(`/folderlist/${selectedId}/`, { stared: !staredStatus })
+            // it's toggle action actually. There is need to specify to what is the previous stared value of selected item
+            const staredStatus = selectedFolder.stared;
+            iaxios.patch(`/folderlist/${selectedId}/`, { stared: !staredStatus }) // pass stared value as opposite value
                 .then(response => {
                     dispatch(setStarFolderAction(selectedId, response.data.stared));
-                })
+                });
         }
         else if (selectedItemType === 'file') {
             const selectedFile = files.find(file => file.id === selectedId);
-            const staredStatus = selectedFile.stared
+            const staredStatus = selectedFile.stared;
             iaxios.put(`/filelist/${selectedId}/filestar/`, { stared: !staredStatus })
                 .then(response => {
                     dispatch(setStarFileAction(selectedId, response.data.stared));
-                })
+                });
         }
-    }
-}
+    };
+};
 
-
+// restore deleted item
 export function restore() {
     return (dispatch, getState) => {
         const { selectedId, selectedItemType } = getState().drive;
@@ -236,15 +251,16 @@ export function restore() {
             iaxios.patch(`/folderlist/${selectedId}/`, {deleted: false})
                 .then(response => {
                     dispatch(deleteFolderAction(selectedId));
+                    // if don't delete selected when switch to dashboard after restore you will see that file is selected
                     dispatch(setSelected(null, null));
                 });
         }
         else if (selectedItemType === 'file') {
             iaxios.patch(`/filelist/${selectedId}/`, {deleted: false})
                 .then(response => {
-                    dispatch(deleteFileAction(selectedId))
+                    dispatch(deleteFileAction(selectedId));
                     dispatch(setSelected(null, null));
                 });
         }
-    }
-}
+    };
+};

@@ -11,6 +11,7 @@ function Auth(props) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassowrd] = useState('');
+    // for detecting auth type is login or register
     const authType = props.match.params.authType
 
     const buttonClickHandler = useCallback(() => {
@@ -104,7 +105,7 @@ function Auth(props) {
 
                     <div className={classes.RegLogDiv}>
                         <Link
-                            to={`/auth/${authType === 'login' ? 'register' : 'login'}`}
+                            to={`/auth/${authType === 'login' ? 'register' : 'login'}`} // change auth type
                             className={classes.RegLog}
                         >
                             {authType === 'login' ? 'QEYDIYYAT' : 'GIRIŞ'}

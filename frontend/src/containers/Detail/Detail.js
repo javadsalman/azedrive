@@ -2,18 +2,19 @@ import classes from './Detail.module.scss';
 import Button from '@mui/material/Button';
 import ShareSection from './ShareSection/ShareSection';
 import CommentSection from './CommentSection/CommentSection';
-import FileIcon from '../../components/UI/File/FileIcon/FileIcon';
 import BlockSpinner from '../../components/UI/Spinner/BlockSpinner/BlockSpinner';
 import { useState, useEffect, useCallback } from 'react';
 import queryString from 'query-string';
 import iaxios from './../../iaxios';
 import { connect } from 'react-redux';
+import FileIcon from './../../components/File/FileIcon/FileIcon';
 
 function Detail(props) {
     const [loading, setLoading] = useState(false);
     const [fileInfo, setFileInfo] = useState({});
     
-    const {fileId} = queryString.parse(props.location.search)
+    const {fileId} = queryString.parse(props.location.search);
+
     useEffect(() => {
         setLoading(true);
         iaxios.get(`/filelist/${fileId}/`)
@@ -23,14 +24,16 @@ function Detail(props) {
         })
         .catch(error => {
             setLoading(false);
-        })
-    }, [fileId])
+        });
+    }, [fileId]);
 
     const downloadHandler = useCallback(() => {
+        // go to download link
         window.open(fileInfo.downloadUrl, '_blank');
     }, [fileInfo.downloadUrl]);
 
     const deleteHandler = useCallback(() => {
+        // send delete request and go to folder of deleted file. If file hasn't folder then go to main dashboard
         iaxios.delete(`/filelist/${fileId}/`)
         .then(response => {
             let url = '/dashboard/main';
@@ -43,15 +46,19 @@ function Detail(props) {
                     }
                 })
             }
+            
             props.history.push(url);
-        })
+
+        });
     }, [props.history, fileId, fileInfo]);
 
     const changeCommentOnStatus = useCallback(() => {
         setLoading(true);
+        // send patch request for open or close comment section
         iaxios.patch(`/filelist/${fileId}/`, {
             'commentOn': !fileInfo.commentOn
         }).then(response => {
+            // response holds the new file info with new comment status
             setFileInfo(response.data);
             setLoading(false);
         }).catch(error => setLoading(false));
@@ -112,7 +119,7 @@ function Detail(props) {
 
                 <div className={classes.SharedDiv}>
                     {
-                        props.authId === fileInfo.author
+                        props.userId === fileInfo.author
                         ?
                         <ShareSection 
                             fileId={fileId}
@@ -127,8 +134,8 @@ function Detail(props) {
                 {fileInfo.commentOn
                     ?
                     <CommentSection 
-                        authId={props.authId} 
-                        isOwner={props.authId === fileInfo.author}
+                        userId={props.userId} 
+                        isOwner={props.userId === fileInfo.author}
                         fileId={fileId}
                     />
                     :
@@ -141,7 +148,7 @@ function Detail(props) {
 
 function mapStateToProps(state) {
     return {
-        authId: Number(state.auth.authId)
+        userId: Number(state.auth.userId)
     };
 };
 

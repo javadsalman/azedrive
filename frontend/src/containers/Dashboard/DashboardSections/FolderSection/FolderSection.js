@@ -1,8 +1,7 @@
 import classes from './FolderSection.module.scss';
-import Folder from './../../../../components/UI/Folder/Folder';
+import Folder from '../../../../components/Folder/Folder';
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { setSelected } from './../../../../store/actions/driveActions';
 
 function FolderSection(props) {
 
@@ -28,13 +27,8 @@ function mapStateToProps(state) {
         folders: state.drive.folders,
         selectedId: state.drive.selectedId,
         selectedItemType: state.drive.selectedItemType
-    }
+    };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        onsetSelected: (id, itemType) => dispatch(setSelected(id, itemType)),
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(FolderSection);
+export default connect(mapStateToProps)(FolderSection);

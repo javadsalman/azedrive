@@ -1,7 +1,7 @@
 import classes from './FileSection.module.scss';
-import File from './../../../../components/UI/File/File';
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
+import File from './../../../../components/File/File';
 
 function FileSection(props) {
     return (
@@ -20,7 +20,7 @@ function FileSection(props) {
                 
             </div>
         </Fragment>
-    )
+    );
 }
 
 function mapStateToProps(state) {
@@ -28,7 +28,7 @@ function mapStateToProps(state) {
         files: state.drive.files,
         selectedId: state.drive.selectedId,
         selectedItemType: state.drive.selectedItemType
-    }
+    };
 }
 
 

@@ -22,23 +22,23 @@ const initialState = {
     ],
     files: [
     ],
-}
+};
 
 const setSelected = (state, action) => {
-    return {...state, selectedId: action.id, selectedItemType: action.itemType}
-}
+    return {...state, selectedId: action.id, selectedItemType: action.itemType};
+};
 
 const setLoading = (state, action) => {
-    return {...state, loading: action.loadingValue}
-}
+    return {...state, loading: action.loadingValue};
+};
 
 const setTotalSize = (state, action) => {
-    return {...state, totalSize: action.totalSize, totalSizeLimit: action.totalSizeLimit}
-}
+    return {...state, totalSize: action.totalSize, totalSizeLimit: action.totalSizeLimit};
+};
 
 const setFiles = (state, action) => {
-    return {...state, files: action.files}
-}
+    return {...state, files: action.files};
+};
 
 const setFolders = (state, action) => {
     return {...state, folders: action.folders};

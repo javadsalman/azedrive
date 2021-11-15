@@ -10,10 +10,12 @@ import queryString from 'query-string';
 
 function Dashboard(props) {
 
-    const { dashType } = props.match.params
-    const { folderId } = queryString.parse(props.location.search)
+    const { dashType } = props.match.params;
+    const { folderId } = queryString.parse(props.location.search);
+
     const itemClickHandler = useCallback((id, itemType, name) => {
         props.onSetSelected(id, itemType);
+        
         if (id === props.selectedId && itemType === props.selectedItemType) {
             if (itemType === 'folder') {
                 const url = queryString.stringifyUrl({
@@ -35,10 +37,10 @@ function Dashboard(props) {
                 props.history.push(url);
             }
         }
-    }, [props])
+    }, [props]);
 
     useEffect(() => {
-        if (props.token) {
+        if (props.token) { // we need check token is exists or not because we need token for send request
             switch(dashType) {
                 case 'main':
                     props.onLoadDashboard();
@@ -59,7 +61,7 @@ function Dashboard(props) {
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.token, dashType, folderId])
+    }, [props.token, dashType, folderId]);
 
     return(
         <div className={classes.Container}>
@@ -69,20 +71,20 @@ function Dashboard(props) {
                 <BlockSpinner />
                 :
                 <Fragment>
-                    { props.haveFolder ? <FolderSection click={itemClickHandler}/> : null }
-                    { props.haveFile ? <FileSection click={itemClickHandler}/> : null }
+                    { props.foldersExists ? <FolderSection click={itemClickHandler}/> : null }
+                    { props.filesExists ? <FileSection click={itemClickHandler}/> : null }
                 </Fragment>
             }
         </div>
-    )
+    );
 }
 
 function mapStateToProps(state) {
     return {
         loading: state.drive.loading,
         token: state.auth.token,
-        haveFile: state.drive.files.length > 0,
-        haveFolder: state.drive.folders.length > 0,
+        filesExists: state.drive.files.length > 0,
+        foldersExists: state.drive.folders.length > 0,
         selectedId: state.drive.selectedId,
         selectedItemType: state.drive.selectedItemType
     };
@@ -92,7 +94,7 @@ function mapDispatchToProps(dispatch) {
     return {
         onLoadDashboard: (customLoadSettings) => dispatch(loadDashboard(customLoadSettings)),
         onSetSelected: (id, itemType) => dispatch(setSelected(id, itemType)),
-    }
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

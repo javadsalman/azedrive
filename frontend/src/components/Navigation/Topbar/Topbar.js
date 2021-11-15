@@ -11,10 +11,11 @@ import UploadFileModal from './TopbarModals/UploadFileModal/UploadFileModal';
 
 function Topbar(props) {
     const [modal, setModal] = useState(null);
-    const { folderName, folderId } = queryString.parse(props.location.search)
+    const { folderName, folderId } = queryString.parse(props.location.search);
     const dashType = props.match.params.dashType;
 
     const iconButtons = useMemo(() => {
+        // don't show any buttons on topbar if dash type is file detail
         if (dashType === 'detail') {
             return null;
         }
@@ -22,6 +23,7 @@ function Topbar(props) {
             return (
                 <Fragment>
                     {
+                        // if dash type is trash then show restore item button for make item undeleted
                         dashType === 'trash'
                             ?
                             <Fragment>
@@ -34,6 +36,7 @@ function Topbar(props) {
                             null
                     }
                     {
+                        // add staring buttons if dash type isn't trash
                         dashType !== 'trash'
                             ?
                             <Fragment>
@@ -45,6 +48,7 @@ function Topbar(props) {
                             :
                             null
                     }
+                    {/* show delete and disselect buttons at any selected situations */}
                     <IconButton aria-label="delete" onClick={props.onDeleteSelected}>
                         <FiTrash2 />
                     </IconButton>
@@ -55,6 +59,7 @@ function Topbar(props) {
                 </Fragment>
             );
         }
+        // if dash type is main or folder then show upload file and folder buttons
         else if (['main', 'folder'].includes(dashType)) {
             return (
                 <Fragment>
@@ -78,13 +83,13 @@ function Topbar(props) {
             case 'trash': return 'Zibil Qutusu';
             case 'detail': return 'Fayl Parameterləri';
             case 'folder': return 'Qovluq - ' + folderName;
-            default: return ''
+            default: return '';
         }
     }, [dashType, folderName]);
 
     const closeModalHandler = useCallback(() => {
         setModal(null);
-    }, [setModal])
+    }, [setModal]);
 
     return (
         <Fragment>
@@ -109,7 +114,7 @@ function Topbar(props) {
                 </div>
             </div>
         </Fragment>
-    )
+    );
 }
 
 function mapStateToProps(state) {

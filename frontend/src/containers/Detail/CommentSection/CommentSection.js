@@ -1,15 +1,16 @@
 import { TextField } from '@mui/material';
 import classes from './CommentSection.module.scss';
-import Comment from './../../../components/UI/Comment/Comment';
+import Comment from '../../../components/Comment/Comment';
 import { useState, useEffect, useCallback, } from 'react';
 import iaxios from './../../../iaxios';
 
 function CommentSection(props) {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
-    const [changeCommentId, setChangeCommentId] = useState(null);
+    const [mustChangeCommentId, setMustmustChangeCommentId] = useState(null);
 
     useEffect(() => {
+        // load comments of shared file
         iaxios.get(`/filelist/${props.fileId}/commentlist/`)
             .then(response => {
                 setComments(response.data);
@@ -20,10 +21,13 @@ function CommentSection(props) {
         iaxios.post(`/filelist/${props.fileId}/commentlist/`, {content: newComment})
         .then(response => {
             setComments(prevState => {
+                // get copy of previous state
                 const newState = prevState.slice();
+                // add new comment to top of array due show comment at top
                 newState.unshift(response.data);
                 return newState;
             });
+            // clear input
             setNewComment('');
         });
     }, [props.fileId, newComment]);
@@ -33,6 +37,7 @@ function CommentSection(props) {
         iaxios.delete(`/filelist/${props.fileId}/commentlist/${commentId}/`)
         .then(response => {
             setComments(prevState => {
+                // remove comment from comment list
                 return prevState.filter(comment => comment.id!==commentId);
             });
         });
@@ -43,6 +48,8 @@ function CommentSection(props) {
         .then(response => {
             setComments(prevState => {
                 return prevState.map(comment => {
+                    // map comments. If comment equal to changed comment then return new value, else
+                    // return previous value
                     if (comment.id === commentId) {
                         return response.data;
                     } else {
@@ -77,14 +84,14 @@ function CommentSection(props) {
                         return (
                             <Comment
                                 id={comment.id}
-                                deletePermission={props.isOwner || props.authId === comment.author}
-                                changePermission={props.authId === comment.author}
+                                hasDeletePermission={props.isOwner || props.userId === comment.author}
+                                hasChangePermission={props.userId === comment.author}
                                 deleteComment={() => deleteCommentHandler(comment.id)}
                                 username={comment.username}
                                 content={comment.content}
-                                shouldChange={changeCommentId === comment.id}
-                                setChangeId={() => {setChangeCommentId(comment.id)}}
-                                clearChangeId={() => {setChangeCommentId(null)}}
+                                mustChange={mustChangeCommentId === comment.id}
+                                setMustChangeId={() => {setMustmustChangeCommentId(comment.id)}}
+                                clearMustChangeId={() => {setMustmustChangeCommentId(null)}}
                                 changeComment={changeCommentHandler}
                                 key={comment.id}
                             />

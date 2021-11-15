@@ -12,9 +12,10 @@ import { checkAuth } from './store/actions/authActions';
 
 function App(props) {
     useEffect(() => {
+        // check local storage for auth information like token, username, and userId when app start
         props.onCheckAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.onCheckAuth])
+    }, [props.onCheckAuth]);
 
 
     const routes = useMemo(() => {
@@ -42,7 +43,7 @@ function App(props) {
                         </div>
                     </div>
                 </div>
-            )
+            );
         }
         else {
             return (
@@ -50,7 +51,7 @@ function App(props) {
                     <Route path="/auth/:authType" component={Auth} />
                     <Redirect to="/auth/login" />
                 </Switch>
-            )
+            );
         }
     }, [props.token]);
 

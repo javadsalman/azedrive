@@ -10,6 +10,7 @@ function ShareSection(props) {
     const [input, setInput] = useState('');
 
     useEffect(() => {
+        // load shared users username list
         iaxios.get(`/filelist/${props.fileId}/sharedusers/`)
             .then(response => {
                 setSharedList(response.data);
@@ -17,6 +18,7 @@ function ShareSection(props) {
     }, [props.fileId]);
 
     const listButtonClickHandler = useCallback((userId) => {
+        // collect selected users
         setSelectedList(prevState => {
             if (prevState.includes(userId)) {
                 return prevState.filter(e => e !== userId)
@@ -30,10 +32,12 @@ function ShareSection(props) {
     }, []);
 
     const deleteUsersHandler = useCallback(() => {
+        // delete selected users
         iaxios.delete(`/filelist/${props.fileId}/sharedusers/`, {
             data: { deletedUsers: selectedList }
         }).then(response => {
             setSharedList(response.data);
+            // clear selected list
             setSelectedList([]);
         })
     }, [props.fileId, selectedList]);
@@ -42,7 +46,9 @@ function ShareSection(props) {
         iaxios.post(`/filelist/${props.fileId}/sharedusers/`, { input: input })
             .then(response => {
                 setSharedList(prevState => {
+                    // check does user already exists in shared list for avoid multiple adding
                     if (prevState.findIndex(e => e.id === response.data.id) === -1) {
+                        // copy list and add user to top
                         const newState = prevState.slice();
                         newState.unshift(response.data);
                         return newState;

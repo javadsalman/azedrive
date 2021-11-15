@@ -13,9 +13,11 @@ import { connect } from 'react-redux';
 import { useMemo } from 'react';
 
 function BasicList(props) {
+    // get blue blue line width in grey width for show percentage used storage as visually
     const filledMemoryPercentage = useMemo(() => {
-        return (props.totalSize / props.totalSizeLimit) * 100
+        return (props.totalSize / props.totalSizeLimit) * 100;
     }, [props.totalSize, props.totalSizeLimit]);
+
     return (
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             <nav aria-label="main mailbox folders">
