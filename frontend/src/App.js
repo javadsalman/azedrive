@@ -12,7 +12,7 @@ import { checkAuth } from './store/actions/authActions';
 
 function App(props) {
     useEffect(() => {
-        // check local storage for auth information like token, username, and userId when app start
+        // check local storage for auth informations such as token, username, and userId when app start
         props.onCheckAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.onCheckAuth]);

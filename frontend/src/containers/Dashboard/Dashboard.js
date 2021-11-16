@@ -39,6 +39,7 @@ function Dashboard(props) {
         }
     }, [props]);
 
+    // load file and folders item based on dashboard type
     useEffect(() => {
         if (props.token) { // we need check token is exists or not because we need token for send request
             switch(dashType) {

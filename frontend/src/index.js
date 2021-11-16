@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import authReducer from './store/reducers/authReducer';
 import driveReducer from './store/reducers/driveReducer';
 
-// combine reducres on one rootReducer
+// combine reducers on one rootReducer
 const rootReducer = combineReducers({
     auth: authReducer,
     drive: driveReducer

@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'drive',
     'user',
     #external apps
-    'django_cleanup', # deleting media files when the related model record deleted
+    'django_cleanup', # Django App for delete media file when the related model instance deleted
     'corsheaders', # Django app for handling the server headers required for Cross-Origin Resource Sharing (CORS)
     'rest_framework',
     'rest_framework.authtoken',
